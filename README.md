@@ -22,7 +22,16 @@ Built with Next.js, Framer Motion, Tailwind CSS, and a custom WebGL/Three.js-ins
 *   **Language:** TypeScript
 *   **Styling:** Tailwind CSS
 *   **Animation:** Framer Motion, GSAP (if applicable)
-*   **Deployment:** Vercel (Recommended)
+*   **Deployment:** Vercel or Render
+
+### Deploying on Render
+
+To deploy this Next.js project on Render, follow these steps:
+1. Create a new **Web Service** on Render and connect this GitHub repository.
+2. In the "Build Command" field, enter: `npm install && npm run build`
+3. In the "Start Command" field, enter: `npm start`
+4. Expand **Advanced** and add any necessary Environment Variables (e.g., your EmailJS keys).
+5. Click **Create Web Service**.
 
 ## 📋 Legal & Usage Rights
 
