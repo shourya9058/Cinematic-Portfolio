@@ -152,7 +152,7 @@ function ImageBlock({ image, title, scrollY, onMouseEnter, onMouseLeave }: {
                 className="w-full h-full scale-110" // Initial scale to allow parallax room
             >
                 <Image
-                    src={image}
+                    src={encodeURI(image)}
                     alt={title}
                     fill
                     className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 ease-in-out"
