@@ -95,7 +95,7 @@ export default function ScrollClipImage({
             <div ref={imgRef} className="absolute inset-0 w-full h-full">
                 {src.endsWith(".mp4") || src.endsWith(".webm") ? (
                     <video
-                        src={src}
+                        src={encodeURI(src)}
                         autoPlay
                         loop
                         muted

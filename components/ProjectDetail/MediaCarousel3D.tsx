@@ -224,7 +224,7 @@ export default function MediaCarousel3D({
                                 {item.type === "video" ? (
                                     <video
                                         ref={el => { videoRefs.current[i] = el; }}
-                                        src={item.src}
+                                        src={encodeURI(item.src)}
                                         muted
                                         loop
                                         playsInline
