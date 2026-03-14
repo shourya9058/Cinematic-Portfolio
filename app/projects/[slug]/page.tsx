@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef } from "react";
 import ScrollClipImage from "@/components/ProjectDetail/ScrollClipImage";
 import MediaCarousel3D from "@/components/ProjectDetail/MediaCarousel3D";
 import ProjectFloatingLinks from "@/components/ProjectDetail/ProjectFloatingLinks";
