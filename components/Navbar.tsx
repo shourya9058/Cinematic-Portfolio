@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import Logo from "./Logo";
+import ResumeModal from "./Resume/ResumeModal";
 
 const navLinks = [
     { name: "Home", href: "#home" },
@@ -16,6 +17,7 @@ export default function Navbar() {
     const [activeSection, setActiveSection] = useState("home");
     const [hidden, setHidden] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isResumeOpen, setIsResumeOpen] = useState(false);
     const { scrollY } = useScroll();
 
     useMotionValueEvent(scrollY, "change", (latest) => {
@@ -123,6 +125,14 @@ export default function Navbar() {
                             )}
                         </a>
                     ))}
+                    
+                    {/* Resume Button */}
+                    <button
+                        onClick={() => setIsResumeOpen(true)}
+                        className="px-6 py-2 rounded-full border border-crimson/30 bg-crimson/10 text-[10px] font-black tracking-[0.3em] uppercase text-crimson hover:bg-crimson hover:text-white transition-all duration-500 shadow-[0_0_15px_rgba(139,0,0,0.1)]"
+                    >
+                        Resume
+                    </button>
                 </div>
 
                 {/* Mobile Toggle */}
@@ -187,10 +197,26 @@ export default function Navbar() {
                                     {link.name}
                                 </motion.a>
                             ))}
+
+                            <motion.button
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: navLinks.length * 0.1 }}
+                                onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    setIsResumeOpen(true);
+                                }}
+                                className="mt-4 px-12 py-4 rounded-full border border-crimson bg-crimson text-white text-lg font-black uppercase tracking-[0.2em]"
+                            >
+                                Resume
+                            </motion.button>
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Resume Modal */}
+            <ResumeModal isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
         </motion.nav>
     );
 }

@@ -3,6 +3,8 @@
 import React, { useState, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import emailjs from "@emailjs/browser";
+import ResumeModal from "./Resume/ResumeModal";
+import { Copy, FileText } from "lucide-react";
 
 function RevealText({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
     return (
@@ -35,6 +37,7 @@ export default function ContactSection() {
 
     const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isResumeOpen, setIsResumeOpen] = useState(false);
 
     const handleCopy = () => {
         navigator.clipboard.writeText(email).then(() => {
@@ -211,6 +214,16 @@ export default function ContactSection() {
                             <p className="text-[10px] font-bold text-white/30 tracking-widest uppercase">Social</p>
                             <p className="text-sm font-medium text-white/60 tracking-wide">@shourya9058</p>
                             <p className="text-sm font-medium text-white/60 tracking-wide">/in/shaurya-singh007/</p>
+                        </div>
+                        
+                        <div className="pt-4 flex justify-end">
+                            <button
+                                onClick={() => setIsResumeOpen(true)}
+                                className="group flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/5 hover:border-crimson/50 transition-all duration-500"
+                            >
+                                <span className="text-[10px] font-black tracking-[0.3em] uppercase text-white/40 group-hover:text-white transition-colors">View Resume</span>
+                                <FileText className="w-4 h-4 text-white/20 group-hover:text-crimson transition-colors" />
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -446,6 +459,9 @@ export default function ContactSection() {
             <div className="absolute bottom-6 w-full flex justify-center opacity-10 pointer-events-none">
                 <span className="text-[9px] font-mono tracking-[0.5em] uppercase">© 2026 SHOURYA SINGH</span>
             </div>
+
+            {/* Resume Modal */}
+            <ResumeModal isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
         </section>
     );
 }
