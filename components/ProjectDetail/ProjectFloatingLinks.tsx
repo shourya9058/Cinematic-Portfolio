@@ -2,7 +2,6 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useCursor } from "@/components/CursorContext";
 
 interface ProjectFloatingLinksProps {
     liveUrl: string;
@@ -11,11 +10,6 @@ interface ProjectFloatingLinksProps {
 }
 
 export default function ProjectFloatingLinks({ liveUrl, repoUrl, isTransitioned }: ProjectFloatingLinksProps) {
-    const { setCursorType } = useCursor();
-
-    const handleMouseEnter = () => setCursorType("project");
-    const handleMouseLeave = () => setCursorType("default");
-
     return (
         <AnimatePresence>
             {isTransitioned && (
@@ -31,8 +25,6 @@ export default function ProjectFloatingLinks({ liveUrl, repoUrl, isTransitioned 
                             href={liveUrl}
                             target="_blank"
                             rel="noreferrer"
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
                             className="group relative flex items-center justify-center px-6 md:px-8 py-3 rounded-full overflow-hidden transition-all duration-500 hover:bg-white/5"
                         >
                             <span className="relative z-10 text-[10px] md:text-[11px] font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase font-syncopate text-white whitespace-nowrap">Live Project ↗</span>
@@ -44,8 +36,6 @@ export default function ProjectFloatingLinks({ liveUrl, repoUrl, isTransitioned 
                             href={repoUrl}
                             target="_blank"
                             rel="noreferrer"
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
                             className="group relative flex items-center justify-center px-6 md:px-8 py-3 rounded-full overflow-hidden transition-all duration-500 hover:bg-white/5"
                             aria-label="GitHub Repository"
                         >

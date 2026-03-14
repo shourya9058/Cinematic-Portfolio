@@ -131,13 +131,16 @@ export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     useEffect(() => {
         if (isLoaded) {
             const timer = setTimeout(() => {
+                // Aggressive refresh to catch all scroll-based features
                 ScrollTrigger.refresh();
-            }, 1000); // Wait for fade-out (0.8s) + a little buffer
+                window.dispatchEvent(new Event('resize'));
+                gsap.ticker.tick();
+            }, 1500); // 1.2s fade + 0.3s buffer
             return () => clearTimeout(timer);
         }
     }, [isLoaded]);
 
-    // Hard safety cap: never show loader longer than 15s
+    // Safety fallback
     useEffect(() => {
         if (!showLoader) return;
         const safety = setTimeout(() => {
@@ -156,11 +159,11 @@ export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ child
                         initial={{ opacity: 1 }}
                         exit={{
                             opacity: 0,
-                            scale: 0.95,
-                            filter: "blur(20px)",
-                            transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] }
+                            scale: 1,
+                            filter: "blur(10px)",
+                            transition: { duration: 1.2, ease: [0.76, 0, 0.24, 1] }
                         }}
-                        className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#050505]"
+                        className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#050505]"
                     >
                         <BackgroundElements />
 
@@ -185,16 +188,8 @@ export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 )}
             </AnimatePresence>
 
-            <motion.div
-                initial={false}
-                animate={{
-                    opacity: (!isInitialized || showLoader) ? 0 : 1,
-                }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="relative w-full h-full"
-            >
-                {isInitialized && children}
-            </motion.div>
+            {/* Render children directly to avoid layout/intersection measurement errors */}
+            {children}
         </LoadingContext.Provider>
     );
 };
