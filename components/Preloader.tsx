@@ -188,8 +188,18 @@ export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 )}
             </AnimatePresence>
 
-            {/* Render children directly to avoid layout/intersection measurement errors */}
-            {children}
+            {/* Use visibility: hidden instead of display: none to ensure measurements are still possible if needed, 
+                and hide until we know if we're loading or not */}
+            <div 
+                className="relative w-full h-full"
+                style={{ 
+                    visibility: (!isInitialized || (showLoader && !isLoaded)) ? 'hidden' : 'visible',
+                    opacity: (!isInitialized || (showLoader && !isLoaded)) ? 0 : 1,
+                    transition: 'opacity 0.5s ease-in'
+                }}
+            >
+                {children}
+            </div>
         </LoadingContext.Provider>
     );
 };
