@@ -144,6 +144,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                                 alt={slide.heading ?? data.title}
                                 fill
                                 priority={slide.isHero}
+                                wipedBy={slides[1]?.id || "project-content"}
                             />
 
                             {/* High-Intensity Technical Vignettes */}
@@ -199,7 +200,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
             {/* ── PAGE 2 (THE LID) ────────────────────────────── */}
             <div className="relative z-10 bg-[#0B0B11]">
                 {/* Subsequent Slides (Screenshots) */}
-                {slides.slice(1).map((slide) => (
+                {slides.slice(1).map((slide, index) => (
                     <section
                         key={slide.id}
                         className="relative overflow-hidden h-screen"
@@ -208,6 +209,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                             src={slide.image}
                             alt={slide.heading ?? data.title}
                             fill
+                            wipedBy={slides[index + 2]?.id || "project-gallery"}
                         />
                         <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-t from-[#0B0B11] via-transparent to-[#0B0B11]/40 opacity-95" />
                         <div className="absolute inset-0 z-20 flex flex-col justify-end px-6 md:px-14 pb-14 md:pb-20">
