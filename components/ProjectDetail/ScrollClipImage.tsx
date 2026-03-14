@@ -42,6 +42,7 @@ export default function ScrollClipImage({
     height,
     priority = false,
     className = "",
+    scroller,
 }: ScrollClipImageProps) {
     const wrapRef = useRef<HTMLDivElement>(null);
     const imgRef = useRef<HTMLDivElement>(null);
