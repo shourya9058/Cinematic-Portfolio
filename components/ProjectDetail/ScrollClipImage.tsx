@@ -120,7 +120,7 @@ export default function ScrollClipImage({
                 className="absolute inset-0 w-full h-full overflow-hidden"
                 style={{ transform: "translate3d(0,0,0)" }}
             >
-                {src.endsWith(".mp4") || src.endsWith(".webm") ? (
+                {(src.toLowerCase().endsWith(".mp4") || src.toLowerCase().endsWith(".webm")) ? (
                     <video
                         ref={videoRef}
                         src={encodeURI(src)}
@@ -129,9 +129,8 @@ export default function ScrollClipImage({
                         muted
                         playsInline
                         preload="auto"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover relative z-[1]"
                         style={{
-                            // Simplified styles to prevent "flicker" conflicts with parent clip-path
                             display: "block",
                         }}
                     />
@@ -141,7 +140,7 @@ export default function ScrollClipImage({
                         alt={alt}
                         fill
                         priority={priority}
-                        className="object-cover"
+                        className="object-cover relative z-[1]"
                         sizes="100vw"
                     />
                 ) : (
