@@ -228,7 +228,16 @@ export default function MediaCarousel3D({
                                         muted
                                         loop
                                         playsInline
-                                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                                        preload="auto"
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "cover",
+                                            display: "block",
+                                            transform: "translateZ(0)",
+                                            backfaceVisibility: "hidden",
+                                            willChange: "transform"
+                                        }}
                                     />
                                 ) : (
                                     <img

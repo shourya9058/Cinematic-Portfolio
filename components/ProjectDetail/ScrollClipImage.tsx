@@ -87,6 +87,17 @@ export default function ScrollClipImage({
         return () => ctx.revert();
     }, [mounted, wipedBy]);
 
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    useEffect(() => {
+        if (mounted && videoRef.current) {
+            // Force play on mount to bypass autoPlay stalls in some Chromium versions
+            videoRef.current.play().catch(() => {
+                // Ignore errors if browser blocks autoplay (unlikely since it's muted)
+            });
+        }
+    }, [mounted, src]);
+
     return (
         <div
             ref={wrapRef}
@@ -95,12 +106,20 @@ export default function ScrollClipImage({
             <div ref={imgRef} className="absolute inset-0 w-full h-full">
                 {src.endsWith(".mp4") || src.endsWith(".webm") ? (
                     <video
+                        ref={videoRef}
                         src={encodeURI(src)}
                         autoPlay
                         loop
                         muted
                         playsInline
+                        preload="auto"
                         className="w-full h-full object-cover"
+                        style={{
+                            // Force hardware acceleration to prevent blank layers on sticky containers
+                            transform: "translateZ(0)",
+                            backfaceVisibility: "hidden",
+                            willChange: "transform"
+                        }}
                     />
                 ) : fill ? (
                     <Image

@@ -123,6 +123,15 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
             {slides.slice(0, 1).map((slide) => {
                 // eslint-disable-next-line react-hooks/rules-of-hooks
                 const heroRef = useRef<HTMLDivElement>(null);
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                const { scrollYProgress: heroProgress } = useScroll({
+                    target: heroRef,
+                    offset: ["start start", "end end"]
+                });
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                const scale = useTransform(heroProgress, [0, 1], [1, 0.92]);
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                const opacity = useTransform(heroProgress, [0, 0.8], [1, 0]);
 
                 return (
                     <section
@@ -138,13 +147,12 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                             background: "#0B0B11"
                         }}
                     >
-                        <div className="w-full h-full">
+                        <motion.div style={{ scale, opacity }} className="w-full h-full">
                             <ScrollClipImage
                                 src={slide.image}
                                 alt={slide.heading ?? data.title}
                                 fill
                                 priority={slide.isHero}
-                                wipedBy={slides[1]?.id}
                             />
 
                             {/* High-Intensity Technical Vignettes */}
@@ -192,7 +200,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                                     <p className="text-[8px] font-black tracking-[0.4em] uppercase text-white/25" style={{ writingMode: "vertical-rl" }}>Scroll</p>
                                 </motion.div>
                             </div>
-                        </div>
+                        </motion.div>
                     </section>
                 );
             })}
@@ -200,10 +208,9 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
             {/* ── PAGE 2 (THE LID) ────────────────────────────── */}
             <div className="relative z-10 bg-[#0B0B11]">
                 {/* Subsequent Slides (Screenshots) */}
-                {slides.slice(1).map((slide, index) => (
+                {slides.slice(1).map((slide) => (
                     <section
                         key={slide.id}
-                        id={slide.id}
                         className="relative overflow-hidden h-screen"
                     >
                         <ScrollClipImage
