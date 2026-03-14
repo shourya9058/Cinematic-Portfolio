@@ -5,6 +5,12 @@ import Link from "next/link";
 import { ArrowLeft, Download } from "lucide-react";
 
 export default function ResumePage() {
+    const [resumeUrl, setResumeUrl] = React.useState("/resume/current_resume.pdf");
+
+    React.useEffect(() => {
+        setResumeUrl(`/resume/current_resume.pdf?v=${Date.now()}`);
+    }, []);
+
     return (
         <main className="min-h-screen bg-[#0B0B0F] text-white selection:bg-crimson selection:text-white flex flex-col">
             {/* Minimal Header */}
@@ -36,7 +42,7 @@ export default function ResumePage() {
             <div className="flex-1 w-full max-w-5xl mx-auto px-4 pb-12">
                 <div className="w-full h-full bg-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-2xl relative">
                     <iframe
-                        src="/resume/current_resume.pdf"
+                        src={resumeUrl}
                         className="w-full h-full min-h-[80vh] border-none"
                         title="Resume Full Viewer"
                     />
