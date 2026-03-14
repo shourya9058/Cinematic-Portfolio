@@ -126,7 +126,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                 // eslint-disable-next-line react-hooks/rules-of-hooks
                 const { scrollYProgress: heroProgress } = useScroll({
                     target: heroRef,
-                    offset: ["start start", "end end"]
+                    offset: ["start start", "end start"]
                 });
                 // eslint-disable-next-line react-hooks/rules-of-hooks
                 const scale = useTransform(heroProgress, [0, 1], [1, 0.92]);
