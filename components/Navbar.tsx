@@ -72,6 +72,7 @@ export default function Navbar() {
     }, []);
 
     return (
+        <>
         <motion.nav
             variants={{
                 visible: { y: 0 },
@@ -215,8 +216,10 @@ export default function Navbar() {
                 )}
             </AnimatePresence>
 
-            {/* Resume Modal */}
-            <ResumeModal isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
         </motion.nav>
+        
+        {/* Resume Modal - Moved outside motion.nav to avoid pointer-events-none inheritance */}
+        <ResumeModal isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
+        </>
     );
 }
