@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import ScrollClipImage from "@/components/ProjectDetail/ScrollClipImage";
 import MediaCarousel3D from "@/components/ProjectDetail/MediaCarousel3D";
+import ProjectFloatingLinks from "@/components/ProjectDetail/ProjectFloatingLinks";
 import { useCursor } from "@/components/CursorContext";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -424,6 +425,8 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
             {/* Grain Overlay */}
             <div className="fixed inset-0 pointer-events-none z-[999] opacity-[0.03]"
                 style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')", mixBlendMode: "overlay" }} />
+                
+            <ProjectFloatingLinks liveUrl={data.liveUrl} repoUrl={data.repoUrl} isTransitioned={isTransitioned} />
         </main>
     );
 }
