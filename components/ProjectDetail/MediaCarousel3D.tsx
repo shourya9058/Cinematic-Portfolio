@@ -234,9 +234,7 @@ export default function MediaCarousel3D({
                                             height: "100%",
                                             objectFit: "cover",
                                             display: "block",
-                                            transform: "translateZ(0)",
-                                            backfaceVisibility: "hidden",
-                                            willChange: "transform"
+                                            transform: "translate3d(0,0,0)",
                                         }}
                                     />
                                 ) : (

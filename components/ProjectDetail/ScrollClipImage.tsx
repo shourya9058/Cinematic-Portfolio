@@ -62,15 +62,22 @@ export default function ScrollClipImage({
             // Set initial state: image fully visible
             gsap.set(el, {
                 clipPath: "inset(0 0 0% 0)",
+                webkitClipPath: "inset(0 0 0% 0)",
                 willChange: "clip-path",
+                // Help browser stabilize GPU layer for the clip
+                transform: "translate3d(0,0,0)",
             });
 
             // As `wipedBy` section enters from below → clip this image upward
             gsap.fromTo(
                 el,
-                { clipPath: "inset(0 0 0% 0)" },
+                { 
+                    clipPath: "inset(0 0 0% 0)",
+                    webkitClipPath: "inset(0 0 0% 0)",
+                },
                 {
                     clipPath: "inset(0 0 100% 0)",
+                    webkitClipPath: "inset(0 0 100% 0)",
                     ease: "none",
                     immediateRender: false,
                     scrollTrigger: {
@@ -91,10 +98,15 @@ export default function ScrollClipImage({
 
     useEffect(() => {
         if (mounted && videoRef.current) {
-            // Force play on mount to bypass autoPlay stalls in some Chromium versions
-            videoRef.current.play().catch(() => {
-                // Ignore errors if browser blocks autoplay (unlikely since it's muted)
-            });
+            // Force play on mount to bypass autoPlay stalls
+            const playVideo = async () => {
+                try {
+                    await videoRef.current?.play();
+                } catch (err) {
+                    // Silently catch autoplay blocks
+                }
+            };
+            playVideo();
         }
     }, [mounted, src]);
 
@@ -103,7 +115,11 @@ export default function ScrollClipImage({
             ref={wrapRef}
             className={`relative overflow-hidden w-full h-full ${className}`}
         >
-            <div ref={imgRef} className="absolute inset-0 w-full h-full">
+            <div 
+                ref={imgRef} 
+                className="absolute inset-0 w-full h-full overflow-hidden"
+                style={{ transform: "translate3d(0,0,0)" }}
+            >
                 {src.endsWith(".mp4") || src.endsWith(".webm") ? (
                     <video
                         ref={videoRef}
@@ -115,10 +131,8 @@ export default function ScrollClipImage({
                         preload="auto"
                         className="w-full h-full object-cover"
                         style={{
-                            // Force hardware acceleration to prevent blank layers on sticky containers
-                            transform: "translateZ(0)",
-                            backfaceVisibility: "hidden",
-                            willChange: "transform"
+                            // Simplified styles to prevent "flicker" conflicts with parent clip-path
+                            display: "block",
                         }}
                     />
                 ) : fill ? (
