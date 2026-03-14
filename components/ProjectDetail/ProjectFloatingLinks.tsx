@@ -13,7 +13,7 @@ interface ProjectFloatingLinksProps {
 export default function ProjectFloatingLinks({ liveUrl, repoUrl, isTransitioned }: ProjectFloatingLinksProps) {
     const { setCursorType } = useCursor();
 
-    const handleMouseEnter = () => setCursorType("hover");
+    const handleMouseEnter = () => setCursorType("project");
     const handleMouseLeave = () => setCursorType("default");
 
     return (
