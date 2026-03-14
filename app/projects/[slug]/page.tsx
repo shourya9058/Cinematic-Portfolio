@@ -151,6 +151,8 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
     const touchY = useRef(0);
     const data = PROJECT_DATA[params.slug] || PROJECT_DATA["default"];
 
+    console.log("Project Page Rendered", params.slug);
+
     React.useEffect(() => {
         setCursorType("default");
     }, [setCursorType]);

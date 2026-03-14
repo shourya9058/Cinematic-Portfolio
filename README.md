@@ -1,4 +1,4 @@
-# Shourya Singh | Full Stack Developer
+# Shourya Singh | Full Stack Developer | [VERified MARCH 14]
 
 A high-end, cinematic, and fully-responsive scrollytelling portfolio showcasing creative development work, modern web experiences, and full-stack capabilities. 
 

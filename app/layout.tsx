@@ -17,7 +17,7 @@ const syncopate = Syncopate({
 });
 
 export const metadata: Metadata = {
-    title: "Shourya Singh | Full Stack Developer Portfolio",
+    title: "Shourya Singh | Full Stack Developer | [VERIFIED]",
     description: "A high-end scrollytelling portfolio showcasing creative development work.",
     icons: {
         icon: "/favicon.svg",
