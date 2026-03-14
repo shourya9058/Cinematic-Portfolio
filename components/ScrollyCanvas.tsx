@@ -15,12 +15,16 @@ export default function ScrollyCanvas({ children }: { children: React.ReactNode 
     const isLoadingRef = useRef(true);
     const resizeTimeoutRef = useRef<NodeJS.Timeout>();
 
-    const { setIsLoaded } = useLoading();
+    const { setAssetLoaded, registerAsset } = useLoading();
 
     const { scrollYProgress } = useScroll({
         target: wrapperRef,
         offset: ["start start", "end end"],
     });
+
+    useEffect(() => {
+        registerAsset("hero-sequence");
+    }, []);
 
     useEffect(() => {
         // Preload images
@@ -54,7 +58,7 @@ export default function ScrollyCanvas({ children }: { children: React.ReactNode 
                 const allImages = [firstFrame, ...restImages];
                 imagesRef.current = allImages;
                 isLoadingRef.current = false;
-                setIsLoaded(true); // Signal that initial assets are ready
+                setAssetLoaded("hero-sequence"); // Signal that hero assets are ready
             });
         });
 

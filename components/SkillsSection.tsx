@@ -3,13 +3,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useScroll, useMotionValueEvent, useSpring } from "framer-motion";
 import SkillOverlay from "./SkillOverlay";
+import { useLoading } from "./Preloader";
 
 export default function SkillsSection() {
     const sectionRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const imagesRef = useRef<HTMLImageElement[]>([]);
     const currentFrameRef = useRef(0);
-    const [isLoaded, setIsLoaded] = useState(false);
+    const { setAssetLoaded, registerAsset } = useLoading();
+    const [isLocalLoaded, setIsLocalLoaded] = useState(false);
     const totalFrames = 120;
 
     const { scrollYProgress } = useScroll({
@@ -25,6 +27,10 @@ export default function SkillsSection() {
     });
 
     useEffect(() => {
+        registerAsset("skills-sequence");
+    }, []);
+
+    useEffect(() => {
         // Preload all frames
         let loadedCount = 0;
         const preloadImages = async () => {
@@ -36,7 +42,8 @@ export default function SkillsSection() {
                     img.onload = () => {
                         loadedCount++;
                         if (loadedCount === totalFrames) {
-                            setIsLoaded(true);
+                            setIsLocalLoaded(true);
+                            setAssetLoaded("skills-sequence");
                             // Draw first frame once loaded
                             drawFrame(0);
                         }
@@ -131,13 +138,6 @@ export default function SkillsSection() {
     return (
         <div ref={sectionRef} className="relative h-[500vh] bg-[#0B0B0F]">
             <div className="sticky top-0 h-screen w-full overflow-hidden">
-                {!isLoaded && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-[#0B0B0F] z-50">
-                        <div className="text-[#EAEAEA] font-mono tracking-[0.5em] text-sm animate-pulse">
-                            INITIALIZING TECH STACK PROTOCOL...
-                        </div>
-                    </div>
-                )}
                 <canvas
                     ref={canvasRef}
                     className="absolute inset-0 w-full h-full"

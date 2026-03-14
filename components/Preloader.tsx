@@ -2,11 +2,19 @@
 
 import React, { useState, useEffect, createContext, useContext, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import AppleHello from "./AppleHello";
+
+if (typeof window !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+}
 
 interface LoadingContextType {
     setIsLoaded: (loaded: boolean) => void;
     isLoaded: boolean;
+    registerAsset: (id: string) => void;
+    setAssetLoaded: (id: string) => void;
 }
 
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
@@ -69,6 +77,21 @@ export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const [isLoaded, setIsLoaded] = useState(false);
     const [showLoader, setShowLoader] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
+    const [animationDone, setAnimationDone] = useState(false);
+    const [assetsToLoad, setAssetsToLoad] = useState<Set<string>>(new Set());
+    const [loadedAssets, setLoadedAssets] = useState<Set<string>>(new Set());
+
+    const registerAsset = (id: string) => {
+        setAssetsToLoad(prev => new Set(prev).add(id));
+    };
+
+    const setAssetLoaded = (id: string) => {
+        setLoadedAssets(prev => new Set(prev).add(id));
+    };
+
+    const allAssetsLoaded = assetsToLoad.size > 0 
+        ? assetsToLoad.size === loadedAssets.size 
+        : true;
 
     useEffect(() => {
         // Force scroll to top on initial landing/refresh
@@ -87,27 +110,45 @@ export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setIsInitialized(true);
     }, []);
 
-    // Called by AppleHello when the SVG finishes drawing — dismiss after a short grace period
+    // Unified check for dismissal
+    useEffect(() => {
+        if (showLoader && animationDone && allAssetsLoaded) {
+            // Tiny delay for smoothness
+            const timer = setTimeout(() => {
+                setShowLoader(false);
+                setIsLoaded(true);
+                sessionStorage.setItem("hasVisited", "true");
+            }, 300);
+            return () => clearTimeout(timer);
+        }
+    }, [showLoader, animationDone, allAssetsLoaded]);
+
     const handleAnimationComplete = () => {
-        setTimeout(() => {
-            setShowLoader(false);
-            setIsLoaded(true);
-            sessionStorage.setItem("hasVisited", "true");
-        }, 200); // just enough for the final stroke to be seen before exit
+        setAnimationDone(true);
     };
 
-    // Hard safety cap: never show loader longer than 8s
+    // GSAP ScrollTrigger refresh after loader is gone
+    useEffect(() => {
+        if (isLoaded) {
+            const timer = setTimeout(() => {
+                ScrollTrigger.refresh();
+            }, 1000); // Wait for fade-out (0.8s) + a little buffer
+            return () => clearTimeout(timer);
+        }
+    }, [isLoaded]);
+
+    // Hard safety cap: never show loader longer than 15s
     useEffect(() => {
         if (!showLoader) return;
         const safety = setTimeout(() => {
             setShowLoader(false);
             setIsLoaded(true);
-        }, 8000);
+        }, 15000);
         return () => clearTimeout(safety);
     }, [showLoader]);
 
     return (
-        <LoadingContext.Provider value={{ isLoaded, setIsLoaded }}>
+        <LoadingContext.Provider value={{ isLoaded, setIsLoaded, registerAsset, setAssetLoaded }}>
             <AnimatePresence mode="wait">
                 {showLoader && (
                     <motion.div
