@@ -39,6 +39,10 @@ export default function ContactSection() {
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [isResumeOpen, setIsResumeOpen] = useState(false);
 
+    React.useEffect(() => {
+        emailjs.init("iuLlpcip4Tx4isOlO");
+    }, []);
+
     const handleCopy = () => {
         navigator.clipboard.writeText(email).then(() => {
             setCopied(true);
@@ -138,8 +142,12 @@ export default function ContactSection() {
             });
 
             setTimeout(() => setStatus("idle"), 5000);
-        } catch (error) {
-            console.error("EmailJS Error:", error);
+        } catch (error: any) {
+            console.error("EmailJS Error Detail:", {
+                message: error?.text || error?.message || "Unknown error",
+                status: error?.status || "No status",
+                fullError: error
+            });
             setStatus("error");
             setTimeout(() => setStatus("idle"), 5000);
         }
