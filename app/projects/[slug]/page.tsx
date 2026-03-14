@@ -123,15 +123,6 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
             {slides.slice(0, 1).map((slide) => {
                 // eslint-disable-next-line react-hooks/rules-of-hooks
                 const heroRef = useRef<HTMLDivElement>(null);
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                const { scrollYProgress: heroProgress } = useScroll({
-                    target: heroRef,
-                    offset: ["start start", "end end"]
-                });
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                const scale = useTransform(heroProgress, [0, 1], [1, 0.92]);
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                const opacity = useTransform(heroProgress, [0, 0.8], [1, 0]);
 
                 return (
                     <section
@@ -147,7 +138,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                             background: "#0B0B11"
                         }}
                     >
-                        <motion.div style={{ scale, opacity }} className="w-full h-full">
+                        <div className="w-full h-full">
                             <ScrollClipImage
                                 src={slide.image}
                                 alt={slide.heading ?? data.title}
@@ -200,7 +191,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                                     <p className="text-[8px] font-black tracking-[0.4em] uppercase text-white/25" style={{ writingMode: "vertical-rl" }}>Scroll</p>
                                 </motion.div>
                             </div>
-                        </motion.div>
+                        </div>
                     </section>
                 );
             })}
