@@ -144,7 +144,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                                 alt={slide.heading ?? data.title}
                                 fill
                                 priority={slide.isHero}
-                                wipedBy="project-content"
+                                wipedBy={slides[1]?.id}
                             />
 
                             {/* High-Intensity Technical Vignettes */}
@@ -203,6 +203,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                 {slides.slice(1).map((slide, index) => (
                     <section
                         key={slide.id}
+                        id={slide.id}
                         className="relative overflow-hidden h-screen"
                     >
                         <ScrollClipImage
