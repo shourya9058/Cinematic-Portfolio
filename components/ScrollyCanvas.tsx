@@ -29,6 +29,7 @@ export default function ScrollyCanvas({ children }: { children: React.ReactNode 
         const loadImage = (index: number) => {
             return new Promise<HTMLImageElement>((resolve) => {
                 const img = new Image();
+                // Assuming the sequence path is correct based on previous context
                 img.src = `/sequence/frame_${index.toString().padStart(3, "0")}.png`;
                 img.onload = () => {
                     loadedCount++;
@@ -41,32 +42,10 @@ export default function ScrollyCanvas({ children }: { children: React.ReactNode 
             });
         };
 
-        const handleResize = () => {
-            if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
-            resizeTimeoutRef.current = setTimeout(() => {
-                if (canvasRef.current) {
-                    resizeCanvas();
-                    if (!isLoadingRef.current) {
-                        drawFrame(currentFrameRef.current);
-                    }
-                }
-            }, 100);
-        };
-
-        window.addEventListener("resize", handleResize);
-        
-        // Ensure canvas is sized before drawing the first frame
-        resizeCanvas();
-
         // Load frame 0 first to show something immediately
         loadImage(0).then((firstFrame) => {
-            if (!firstFrame) return;
             imagesRef.current[0] = firstFrame;
-            
-            // Only draw if we haven't already scrolled away
-            requestAnimationFrame(() => {
-               drawFrame(currentFrameRef.current);
-            });
+            drawFrame(0);
 
             // Load the rest in background
             const imagePromises = Array.from({ length: totalFrames - 1 }, (_, i) => loadImage(i + 1));
@@ -79,35 +58,39 @@ export default function ScrollyCanvas({ children }: { children: React.ReactNode 
             });
         });
 
+        const handleResize = () => {
+            if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
+            resizeTimeoutRef.current = setTimeout(() => {
+                if (canvasRef.current) {
+                    resizeCanvas();
+                    drawFrame(currentFrameRef.current);
+                }
+            }, 100);
+        };
+
+        window.addEventListener("resize", handleResize);
+        resizeCanvas();
+
         return () => {
             window.removeEventListener("resize", handleResize);
             if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
         };
-    }, [setIsLoaded]);
+    }, []);
 
     const resizeCanvas = () => {
         if (!canvasRef.current) return;
-        const parent = canvasRef.current.parentElement;
-        if (parent) {
-            canvasRef.current.width = window.innerWidth;
-            canvasRef.current.height = window.innerHeight;
-        }
+        canvasRef.current.width = window.innerWidth;
+        canvasRef.current.height = window.innerHeight;
     };
 
     const drawFrame = (frameIndex: number) => {
         if (!canvasRef.current || !imagesRef.current[frameIndex]) return;
 
         const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d", { alpha: false }); // Optimize for non-transparent sequence
+        const ctx = canvas.getContext("2d");
         if (!ctx) return;
-        
-        // Prevent drawing if canvas is somehow 0 width/height
-        if (canvas.width === 0 || canvas.height === 0) return;
 
         const img = imagesRef.current[frameIndex];
-        
-        // Double check image is fully loaded with dimensions
-        if (img.width === 0 || img.height === 0) return;
 
         // Object-fit: cover logic
         const canvasRatio = canvas.width / canvas.height;
@@ -136,8 +119,7 @@ export default function ScrollyCanvas({ children }: { children: React.ReactNode 
         offsetX = (canvas.width - drawWidth) / 2;
         offsetY = (canvas.height - drawHeight) / 2;
 
-        ctx.fillStyle = "#000000"; // Fill black background first
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
 
         currentFrameRef.current = frameIndex;
@@ -152,7 +134,7 @@ export default function ScrollyCanvas({ children }: { children: React.ReactNode 
         );
 
         if (frameIndex !== currentFrameRef.current) {
-            drawFrame(frameIndex); // Removed requestAnimationFrame here as useMotionValueEvent is already optimized
+            requestAnimationFrame(() => drawFrame(frameIndex));
         }
     });
 

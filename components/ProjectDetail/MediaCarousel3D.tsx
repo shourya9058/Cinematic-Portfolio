@@ -224,18 +224,11 @@ export default function MediaCarousel3D({
                                 {item.type === "video" ? (
                                     <video
                                         ref={el => { videoRefs.current[i] = el; }}
-                                        src={encodeURI(item.src)}
+                                        src={item.src}
                                         muted
                                         loop
                                         playsInline
-                                        preload="auto"
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover",
-                                            display: "block",
-                                            transform: "translate3d(0,0,0)",
-                                        }}
+                                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                                     />
                                 ) : (
                                     <img
