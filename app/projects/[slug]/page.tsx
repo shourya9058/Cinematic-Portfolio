@@ -8,6 +8,12 @@ import ScrollClipImage from "@/components/ProjectDetail/ScrollClipImage";
 import MediaCarousel3D from "@/components/ProjectDetail/MediaCarousel3D";
 import ProjectFloatingLinks from "@/components/ProjectDetail/ProjectFloatingLinks";
 import { useCursor } from "@/components/CursorContext";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+}
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 import { PROJECT_DATA } from "@/constants/projects";
@@ -30,96 +36,112 @@ function HR() {
 // ─── Scroll-Fill Text Component ───────────────────────────────────────────────
 function ScrollFillText({ text, container, className = "" }: { text: string; container?: React.RefObject<HTMLElement>; className?: string }) {
     const ref = useRef<HTMLParagraphElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        container: container,
-        offset: ["start 0.8", "start 0.2"]
-    });
-
-    const smoothProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 25, mass: 0.5 });
-
     const words = text.split(" ");
+
+    useEffect(() => {
+        if (!ref.current || !container?.current) return;
+
+        const wordsEls = ref.current.querySelectorAll(".word-span");
+        
+        const ctx = gsap.context(() => {
+            gsap.fromTo(wordsEls, 
+                { 
+                    opacity: 0.15, 
+                    color: "rgba(255,255,255,0.05)",
+                    y: 5,
+                    scale: 0.96
+                },
+                {
+                    opacity: 1,
+                    color: "#8B0000",
+                    y: 0,
+                    scale: 1,
+                    stagger: 0.1,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: ref.current,
+                        scroller: container.current,
+                        start: "top 80%",
+                        end: "top 20%",
+                        scrub: 1,
+                    }
+                }
+            );
+        }, ref);
+
+        return () => ctx.revert();
+    }, [container]);
+
     return (
         <p ref={ref} className={`flex flex-wrap gap-x-[0.25em] gap-y-[0.1em] ${className}`}>
-            {words.map((word, i) => {
-                const start = i / words.length;
-                const end = start + (1 / words.length);
-                return (
-                    <Word key={i} word={word} progress={smoothProgress} range={[start, end]} />
-                );
-            })}
+            {words.map((word, i) => (
+                <span key={i} className="relative overflow-hidden inline-block py-1 pr-2">
+                    <span className="absolute inset-0 opacity-5 text-white/5 select-none blur-[4px] pointer-events-none">{word}</span>
+                    <span className="word-span inline-block relative z-10 font-syncopate tracking-tight">
+                        {word}
+                    </span>
+                </span>
+            ))}
         </p>
     );
 }
 
-function Word({ word, progress, range }: { word: string; progress: any; range: [number, number] }) {
-    // Expand the range slightly for overlapping liquid effect
-    const [start] = range;
-    const overlap = 0.1;
-    
-    // Once filled (scrolled down), it stays filled. It only defills when scrolling back up.
-    const opacity = useTransform(progress, 
-        [start - overlap, start], 
-        [0.15, 1]
-    );
-    const color = useTransform(progress, 
-        [start - overlap, start], 
-        ["rgba(255,255,255,0.05)", "#8B0000"]
-    );
-    const y = useTransform(progress, [start - overlap, start], [5, 0]);
-    const scale = useTransform(progress, 
-        [start - overlap, start], 
-        [0.96, 1]
-    );
-
-    return (
-        <span className="relative overflow-hidden inline-block py-1 pr-2">
-            <span className="absolute inset-0 opacity-5 text-white/5 select-none blur-[4px] pointer-events-none">{word}</span>
-            <motion.span style={{ opacity, color, y, scale }} className="inline-block relative z-10 font-syncopate tracking-tight">
-                {word}
-            </motion.span>
-        </span>
-    );
-}
-
-// ─── Watermark Title Component ───────────────────────────────────────────────
 function WatermarkTitle({ title, container }: { title: string; container?: React.RefObject<HTMLElement> }) {
     const ref = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        container: container,
-        offset: ["start end", "end start"]
-    });
+    const textRef = useRef<HTMLHeadingElement>(null);
 
-    // Cinematic movement
-    const x = useTransform(scrollYProgress, [0, 1], ["8%", "-8%"]);
-    // Keep it visible as long as the section is active
-    const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 0.45, 0.45, 0]);
-    const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1, 1.1]);
-    const blur = useTransform(scrollYProgress, [0, 0.5, 1], ["blur(10px)", "blur(0px)", "blur(10px)"]);
+    useEffect(() => {
+        if (!ref.current || !container?.current || !textRef.current) return;
+
+        const ctx = gsap.context(() => {
+            // Cinematic parallax and fade
+            gsap.fromTo(textRef.current,
+                { 
+                    x: "8%", 
+                    opacity: 0, 
+                    scale: 0.9,
+                    filter: "blur(10px)"
+                },
+                {
+                    x: "-8%",
+                    opacity: 0.45,
+                    scale: 1.1,
+                    filter: "blur(0px)",
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: ref.current,
+                        scroller: container.current,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 1,
+                    }
+                }
+            );
+
+            // Floating animation independent of scroll
+            gsap.to(textRef.current, {
+                y: -20,
+                duration: 5,
+                repeat: -1,
+                yoyo: true,
+                ease: "power1.inOut"
+            });
+        }, ref);
+
+        return () => ctx.revert();
+    }, [container]);
 
     return (
-        <div ref={ref} className="absolute inset-0 flex items-center justify-center select-none pointer-events-none overflow-hidden h-full w-full">
-            <motion.h2
+        <div ref={ref} className="absolute inset-0 flex items-center justify-center select-none pointer-events-none overflow-hidden h-full w-full z-0">
+            <h2
+                ref={textRef}
                 style={{
-                    x,
-                    opacity,
-                    scale,
-                    filter: blur,
                     WebkitTextStroke: "1.5px rgba(255,255,255,0.4)",
                 }}
-                animate={{
-                    y: [0, -20, 0],
-                }}
-                transition={{
-                    duration: 10,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                }}
-                className="text-[48vw] leading-none font-black tracking-[-0.04em] text-transparent whitespace-nowrap font-syncopate uppercase select-none z-0"
+                className="text-[48vw] leading-none font-black tracking-[-0.04em] text-transparent whitespace-nowrap font-syncopate uppercase select-none relative"
             >
                 {title}
-            </motion.h2>
+            </h2>
 
             {/* Ambient Background Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[45vw] bg-[#8B0000]/15 blur-[160px] rounded-full z-[-1]" />
@@ -150,8 +172,6 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const touchY = useRef(0);
     const data = PROJECT_DATA[params.slug] || PROJECT_DATA["default"];
-
-    console.log("Project Page Rendered", params.slug);
 
     React.useEffect(() => {
         setCursorType("default");
