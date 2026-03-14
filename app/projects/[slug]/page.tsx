@@ -27,14 +27,15 @@ function HR() {
 }
 
 // ─── Scroll-Fill Text Component ───────────────────────────────────────────────
-function ScrollFillText({ text, className = "" }: { text: string; className?: string }) {
+function ScrollFillText({ text, container, className = "" }: { text: string; container?: React.RefObject<HTMLElement>; className?: string }) {
     const ref = useRef<HTMLParagraphElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
-        offset: ["start 0.9", "start 0.1"]
+        container: container,
+        offset: ["start 0.8", "start 0.2"]
     });
 
-    const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+    const smoothProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 25, mass: 0.5 });
 
     const words = text.split(" ");
     return (
@@ -51,10 +52,24 @@ function ScrollFillText({ text, className = "" }: { text: string; className?: st
 }
 
 function Word({ word, progress, range }: { word: string; progress: any; range: [number, number] }) {
-    const opacity = useTransform(progress, range, [0.35, 1]);
-    const color = useTransform(progress, range, ["rgba(255,255,255,0.08)", "#8B0000"]);
-    const y = useTransform(progress, range, [8, 0]);
-    const scale = useTransform(progress, range, [0.98, 1]);
+    // Expand the range slightly for overlapping liquid effect
+    const [start] = range;
+    const overlap = 0.1;
+    
+    // Once filled (scrolled down), it stays filled. It only defills when scrolling back up.
+    const opacity = useTransform(progress, 
+        [start - overlap, start], 
+        [0.15, 1]
+    );
+    const color = useTransform(progress, 
+        [start - overlap, start], 
+        ["rgba(255,255,255,0.05)", "#8B0000"]
+    );
+    const y = useTransform(progress, [start - overlap, start], [5, 0]);
+    const scale = useTransform(progress, 
+        [start - overlap, start], 
+        [0.96, 1]
+    );
 
     return (
         <span className="relative overflow-hidden inline-block py-1 pr-2">
@@ -67,26 +82,47 @@ function Word({ word, progress, range }: { word: string; progress: any; range: [
 }
 
 // ─── Watermark Title Component ───────────────────────────────────────────────
-function WatermarkTitle({ title }: { title: string }) {
-    const ref = useRef<HTMLHeadingElement>(null);
+function WatermarkTitle({ title, container }: { title: string; container?: React.RefObject<HTMLElement> }) {
+    const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
+        container: container,
         offset: ["start end", "end start"]
     });
 
-    const y = useTransform(scrollYProgress, [0, 1], [-200, 200]);
-    const opacity = useTransform(scrollYProgress, [0, 0.45, 0.55, 1], [0, 0.12, 0.12, 0]);
-    const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.85, 1, 1.15]);
+    // Cinematic movement
+    const x = useTransform(scrollYProgress, [0, 1], ["8%", "-8%"]);
+    // Keep it visible as long as the section is active
+    const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 0.45, 0.45, 0]);
+    const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1, 1.1]);
     const blur = useTransform(scrollYProgress, [0, 0.5, 1], ["blur(10px)", "blur(0px)", "blur(10px)"]);
 
     return (
-        <motion.h2
-            ref={ref}
-            style={{ y, opacity, scale, filter: blur }}
-            className="text-[26vw] leading-none font-bold tracking-[-0.12em] text-white whitespace-nowrap font-syncopate mix-blend-overlay pointer-events-none select-none"
-        >
-            {title}
-        </motion.h2>
+        <div ref={ref} className="absolute inset-0 flex items-center justify-center select-none pointer-events-none overflow-hidden h-full w-full">
+            <motion.h2
+                style={{
+                    x,
+                    opacity,
+                    scale,
+                    filter: blur,
+                    WebkitTextStroke: "1.5px rgba(255,255,255,0.4)",
+                }}
+                animate={{
+                    y: [0, -20, 0],
+                }}
+                transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                className="text-[48vw] leading-none font-black tracking-[-0.04em] text-transparent whitespace-nowrap font-syncopate uppercase select-none z-0"
+            >
+                {title}
+            </motion.h2>
+
+            {/* Ambient Background Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[45vw] bg-[#8B0000]/15 blur-[160px] rounded-full z-[-1]" />
+        </div>
     );
 }
 
@@ -256,7 +292,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                     {/* Subsequent Slides */}
                     {slides.slice(1).map((slide) => (
                         <section key={slide.id} className="relative overflow-hidden h-screen h-[100dvh]">
-                            <ScrollClipImage src={slide.image} alt={slide.heading ?? data.title} fill />
+                            <ScrollClipImage src={slide.image} alt={slide.heading ?? data.title} fill scroller={scrollContainerRef} />
                             <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-t from-[#0B0B11] via-transparent to-[#0B0B11]/40 opacity-95" />
                             <div className="absolute inset-0 z-20 flex flex-col justify-end px-6 md:px-14 pb-14 md:pb-24">
                                 <div className="absolute top-24 left-6 md:left-14">
@@ -294,8 +330,9 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                                     <p className="text-[9px] font-black tracking-[0.5em] uppercase text-white/15">{data.gallery.length} Images</p>
                                 </div>
                             </div>
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex justify-center pointer-events-none select-none z-0">
-                                <WatermarkTitle title={data.title} />
+                            {/* Background Cinematic Title */}
+                            <div className="absolute inset-0 pointer-events-none select-none z-0">
+                                <WatermarkTitle title={data.title} container={scrollContainerRef} />
                             </div>
                             <MediaCarousel3D media={data.gallery} cardWidth={900} cardHeight={560} gap={55} primaryColor="#ffffff" />
                         </section>
@@ -322,7 +359,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                                         <div className="bg-white/[0.01] border border-white/[0.03] rounded-[2rem] p-10 md:p-16 backdrop-blur-sm relative overflow-hidden group">
                                             <SectionLabel>Overview</SectionLabel>
                                             <div className="mt-10">
-                                                <ScrollFillText text={data.overview} className="text-2xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.05] text-white font-syncopate" />
+                                                <ScrollFillText text={data.overview} container={scrollContainerRef} className="text-2xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.05] text-white font-syncopate" />
                                             </div>
                                         </div>
                                         <div className="bg-white/[0.01] border border-white/[0.03] rounded-[2rem] p-10 md:p-16 backdrop-blur-sm relative overflow-hidden group">
@@ -372,8 +409,8 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
 
                         <section className="px-6 md:px-14 py-36 text-center">
                             <motion.h2 className="text-[12vw] md:text-[8vw] font-bold uppercase tracking-[-0.08em] leading-none font-syncopate">
-                                <span className="text-white">Experience</span><br />
-                                <span className="text-white/10 italic">Evolution.</span>
+                                <span className="text-white">Solutions</span><br />
+                                <span className="text-white/10 italic">Redefined.</span>
                             </motion.h2>
                             <Link href="/#work" className="mt-20 group inline-flex items-center gap-8 text-[11px] font-bold tracking-[0.5em] uppercase text-white/30 hover:text-white transition-all duration-700">
                                 <div className="w-12 h-px bg-current group-hover:w-24 transition-all duration-700" />

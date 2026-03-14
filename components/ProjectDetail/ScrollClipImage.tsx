@@ -21,6 +21,7 @@ interface ScrollClipImageProps {
     height?: number;
     priority?: boolean;
     className?: string;
+    scroller?: string | HTMLElement | React.RefObject<HTMLElement>;
 }
 
 /**
@@ -75,6 +76,7 @@ export default function ScrollClipImage({
                     immediateRender: false,
                     scrollTrigger: {
                         trigger: triggerEl,
+                        scroller: typeof scroller === "string" || scroller instanceof HTMLElement ? scroller : (scroller?.current || undefined),
                         start: "top bottom",   // triggerEl's top hits viewport bottom
                         end: "bottom bottom",  // triggerEl's bottom hits viewport bottom
                         scrub: true,
