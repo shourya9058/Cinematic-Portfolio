@@ -103,7 +103,7 @@ function WatermarkTitle({ title, container }: { title: string; container?: React
                 },
                 {
                     x: "-8%",
-                    opacity: 0.45,
+                    opacity: 0.7, // Increased from 0.45 for better visibility
                     scale: 1.1,
                     filter: "blur(0px)",
                     ease: "none",
@@ -135,9 +135,10 @@ function WatermarkTitle({ title, container }: { title: string; container?: React
             <h2
                 ref={textRef}
                 style={{
-                    WebkitTextStroke: "1.5px rgba(255,255,255,0.4)",
+                    WebkitTextStroke: "2px rgba(255,255,255,0.6)", // Thicker stroke
+                    color: "rgba(255,255,255,0.05)", // Subtle fill instead of transparent
                 }}
-                className="text-[48vw] leading-none font-black tracking-[-0.04em] text-transparent whitespace-nowrap font-syncopate uppercase select-none relative"
+                className="text-[48vw] leading-none font-black tracking-[-0.04em] whitespace-nowrap font-syncopate uppercase select-none relative"
             >
                 {title}
             </h2>

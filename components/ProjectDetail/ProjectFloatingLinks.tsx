@@ -24,9 +24,9 @@ export default function ProjectFloatingLinks({ liveUrl, repoUrl, isTransitioned 
                     animate={{ y: 0, opacity: 1, scale: 1 }}
                     exit={{ y: 50, opacity: 0, scale: 0.95 }}
                     transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                    className="fixed bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-[300] pointer-events-auto flex justify-center"
+                    className="fixed bottom-6 md:bottom-10 left-0 right-0 z-[300] pointer-events-none flex justify-center items-center"
                 >
-                    <div className="flex items-center justify-center bg-[#0B0B11]/80 backdrop-blur-xl rounded-full border border-white/10 p-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.6)] relative overflow-hidden group/container transition-all duration-700 hover:border-white/20">
+                    <div className="flex items-center justify-center bg-[#0B0B11]/80 backdrop-blur-xl rounded-full border border-white/10 p-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.6)] relative overflow-hidden group/container transition-all duration-700 hover:border-white/20 pointer-events-auto">
                         <a
                             href={liveUrl}
                             target="_blank"
