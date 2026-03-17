@@ -14,8 +14,7 @@ const NAV_LINKS = [
 const SOCIALS = [
     { name: "GitHub", href: "https://github.com/shourya9058" },
     { name: "LinkedIn", href: "https://www.linkedin.com/in/shaurya-singh007/" },
-    { name: "Twitter", href: "https://twitter.com/shouryasingh" },
-    { name: "Instagram", href: "https://www.instagram.com/_Shouryasingh__/" },
+    { name: "Instagram", href: "https://www.instagram.com/_shauryasingh__" },
 ];
 
 export default function Footer() {
