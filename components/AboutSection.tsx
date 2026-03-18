@@ -328,7 +328,7 @@ function ImagePanel({ style = {} }: { style?: React.CSSProperties }) {
                 opacity: hovered ? 1 : 0,
                 pointerEvents: "none",
             }}>
-                <Bubble text="Sup! Debugging life one commit at a time." />
+                <Bubble text="Sup!" />
             </div>
         </div>
     );
