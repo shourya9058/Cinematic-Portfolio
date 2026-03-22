@@ -17,12 +17,12 @@
 
 html {
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -77,6 +77,18 @@ body {
 }
 
 
+/* Watermark floating animation — compositor thread, no JS required */
+@keyframes watermarkFloat {
+  from { transform: translateY(0px); }
+  to   { transform: translateY(-20px); }
+}
+
+/* Promote key animated sections to their own GPU layer on project detail */
+.project-hero-layer,
+.project-content-layer {
+  will-change: transform;
+  backface-visibility: hidden;
+}
 
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {

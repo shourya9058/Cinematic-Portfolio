@@ -42,12 +42,12 @@ export default function Overlay() {
             {/* Phase 1: Right Aligned */}
             <motion.div
                 style={{ opacity: phase1Opacity, x: phase1X }}
-                className="absolute top-[30%] right-[10%] max-w-2xl text-right z-20"
+                className="absolute top-[25%] md:top-[30%] right-[5%] md:right-[10%] max-w-[90%] md:max-w-2xl text-right z-20"
             >
-                <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-2 text-white leading-none">
+                <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold tracking-tighter mb-2 text-white leading-none">
                     SHOURYA SINGH<span className="text-crimson">.</span>
                 </h1>
-                <p className="text-xl md:text-3xl font-light tracking-[0.2em] text-text-muted uppercase">
+                <p className="text-base sm:text-xl md:text-3xl font-light tracking-[0.2em] text-text-muted uppercase">
                     Full Stack Developer
                 </p>
             </motion.div>
@@ -55,9 +55,9 @@ export default function Overlay() {
             {/* Phase 2: Left Aligned */}
             <motion.div
                 style={{ opacity: phase2Opacity, x: phase2X }}
-                className="absolute bottom-[30%] left-[10%] max-w-2xl text-left z-20"
+                className="absolute bottom-[25%] md:bottom-[30%] left-[5%] md:left-[10%] max-w-[90%] md:max-w-2xl text-left z-20"
             >
-                <h2 className="text-4xl md:text-6xl font-bold leading-tight text-white uppercase tracking-tighter">
+                <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight text-white uppercase tracking-tighter">
                     Turning Ideas <span className="text-crimson">Into</span><br />
                     Scalable Applications
                 </h2>

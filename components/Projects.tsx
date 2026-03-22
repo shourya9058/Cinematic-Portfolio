@@ -64,7 +64,7 @@ export default function Projects() {
     let charCount = 0;
 
     return (
-        <section ref={sectionRef} id="projects" className="bg-[#0B0B0F] relative border-t border-white/10">
+        <section ref={sectionRef} id="projects" className="bg-[#0B0B0F] relative border-t border-white/10 py-10 md:py-0">
             {/* Grid background lines */}
             <div className="absolute inset-0 pointer-events-none">
                 <div className="h-full w-[25%] border-r border-white/10 absolute left-0" />
@@ -98,8 +98,8 @@ export default function Projects() {
 
                 {/* Big Statement Row */}
                 <div className="grid grid-cols-1 md:grid-cols-4 border-b border-white/10">
-                    <div className="col-span-1 md:col-span-3 p-8 md:p-12 lg:p-20 border-r border-white/10">
-                        <h2 className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-[#EAEAEA] uppercase tracking-tighter leading-[0.85] whitespace-normal">
+                    <div className="col-span-1 md:col-span-3 p-6 sm:p-8 md:p-12 lg:p-20 border-r border-white/10">
+                        <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-[#EAEAEA] uppercase tracking-tighter leading-[0.85] whitespace-normal">
                             {headingLines.map((line, lineIdx) => (
                                 <span
                                     key={lineIdx}

@@ -25,7 +25,7 @@ export default function ScrollStorySection() {
     const bgX = useTransform(scrollYProgress, [0, 0.8], ["-10%", "10%"]);
 
     return (
-        <div ref={sectionRef} className="relative h-[200vh] bg-black z-20">
+        <div ref={sectionRef} className="relative h-[200vh] bg-black z-20" style={{ overflowX: "clip" }}>
             <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
 
                 {/* Background Layer (Huge Hollow Text) */}

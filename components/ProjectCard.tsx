@@ -73,7 +73,7 @@ export default function ProjectCard({ title, description, image, slug, tech, ind
                     {/* 1. LEFT MODE: IMAGE (1-7) | TEXT (8-12) */}
                     {layoutMode === "left" && (
                         <>
-                            <div className="md:col-span-7 lg:col-span-8 p-6 md:p-12 lg:p-20 border-r border-white/10 border-b md:border-b-0 order-1">
+                            <div className="md:col-span-7 lg:col-span-8 p-4 sm:p-6 md:p-12 lg:p-20 border-b md:border-b-0 md:border-r border-white/10 order-1">
                                 <ImageBlock
                                     image={image}
                                     title={title}
@@ -82,7 +82,7 @@ export default function ProjectCard({ title, description, image, slug, tech, ind
                                     onMouseLeave={() => setCursorType("default")}
                                 />
                             </div>
-                            <div className="md:col-span-5 lg:col-span-4 p-8 md:p-10 flex flex-col justify-between order-2">
+                            <div className="md:col-span-5 lg:col-span-4 p-6 sm:p-8 md:p-10 flex flex-col justify-between order-2">
                                 <TextBlock title={title} tech={tech} />
                             </div>
                         </>
@@ -91,10 +91,10 @@ export default function ProjectCard({ title, description, image, slug, tech, ind
                     {/* 2. RIGHT MODE: TEXT (1-5) | IMAGE (6-12) */}
                     {layoutMode === "right" && (
                         <>
-                            <div className="md:col-span-5 lg:col-span-4 p-8 md:p-10 border-r border-white/10 border-b md:border-b-0 order-2 md:order-1">
+                            <div className="md:col-span-5 lg:col-span-4 p-6 sm:p-8 md:p-10 border-b md:border-b-0 md:border-r border-white/10 order-2 md:order-1">
                                 <TextBlock title={title} tech={tech} />
                             </div>
-                            <div className="md:col-span-7 lg:col-span-8 p-6 md:p-12 lg:p-20 order-1 md:order-2">
+                            <div className="md:col-span-7 lg:col-span-8 p-4 sm:p-6 md:p-12 lg:p-20 order-1 md:order-2">
                                 <ImageBlock
                                     image={image}
                                     title={title}
@@ -110,7 +110,7 @@ export default function ProjectCard({ title, description, image, slug, tech, ind
                     {layoutMode === "center" && (
                         <>
                             <div className="hidden md:block md:col-span-1 border-r border-white/10" />
-                            <div className="md:col-span-6 lg:col-span-7 p-6 md:p-12 lg:p-24 border-r border-white/10 border-b md:border-b-0 order-1">
+                            <div className="md:col-span-6 lg:col-span-7 p-4 sm:p-6 md:p-12 lg:p-24 border-b md:border-b-0 md:border-r border-white/10 order-1">
                                 <ImageBlock
                                     image={image}
                                     title={title}
@@ -119,7 +119,7 @@ export default function ProjectCard({ title, description, image, slug, tech, ind
                                     onMouseLeave={() => setCursorType("default")}
                                 />
                             </div>
-                            <div className="md:col-span-5 lg:col-span-4 p-8 md:p-10 flex flex-col justify-between order-2">
+                            <div className="md:col-span-5 lg:col-span-4 p-6 sm:p-8 md:p-10 flex flex-col justify-between order-2">
                                 <TextBlock title={title} tech={tech} />
                             </div>
                         </>
@@ -140,7 +140,7 @@ function ImageBlock({ image, title, scrollY, onMouseEnter, onMouseLeave }: {
 }) {
     return (
         <div
-            className="relative w-full aspect-[16/9] overflow-hidden bg-[#121212] transition-all duration-700 shadow-2xl group-hover:shadow-[0_0_60px_rgba(139,0,0,0.15)] group-hover:scale-[1.02] cursor-none"
+            className="relative w-full aspect-video md:aspect-[16/9] overflow-hidden bg-[#121212] transition-all duration-700 shadow-2xl group-hover:shadow-[0_0_60px_rgba(139,0,0,0.15)] group-hover:scale-[1.02] cursor-none"
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
@@ -167,7 +167,7 @@ function ImageBlock({ image, title, scrollY, onMouseEnter, onMouseLeave }: {
 function TextBlock({ title, tech }: { title: string, tech: string[] }) {
     return (
         <div className="h-full flex flex-col justify-between py-6">
-            <h3 className="text-4xl md:text-5xl lg:text-7xl font-black uppercase tracking-tighter text-[#EAEAEA] leading-[0.9] mb-12 hover:text-crimson transition-colors duration-300">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase tracking-tighter text-[#EAEAEA] leading-[0.9] mb-8 md:mb-12 hover:text-crimson transition-colors duration-300">
                 {title}
             </h3>
             <div className="space-y-2">

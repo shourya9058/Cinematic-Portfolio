@@ -65,6 +65,7 @@ export default function ScrollClipImage({
             gsap.set(el, {
                 clipPath: "inset(0 0 0% 0)",
                 willChange: "clip-path",
+                backfaceVisibility: "hidden",
             });
 
             // As `wipedBy` section enters from below → clip this image upward
@@ -95,7 +96,7 @@ export default function ScrollClipImage({
             ref={wrapRef}
             className={`relative overflow-hidden w-full h-full ${className}`}
         >
-            <div ref={imgRef} className="absolute inset-0 w-full h-full">
+            <div ref={imgRef} className="absolute inset-0 w-full h-full" style={{ willChange: "clip-path", backfaceVisibility: "hidden" }}>
                 {src.endsWith(".mp4") || src.endsWith(".webm") ? (
                     <video
                         src={src}

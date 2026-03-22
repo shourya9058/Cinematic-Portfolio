@@ -19,6 +19,9 @@ const FUN_DARK = "#111111";
 const PANEL_BORDER = "7px solid #000";
 const PANEL_SHADOW = "6px 6px 0px #000";
 const GUTTER = "18px";
+const PANEL_BORDER_MOBILE = "4px solid #000";
+const PANEL_SHADOW_MOBILE = "4px 4px 0px #000";
+const GUTTER_MOBILE = "12px";
 
 // ─── Background textures ───────────────────────────────────────────────────────
 const bwHalftone: React.CSSProperties = {
@@ -183,10 +186,12 @@ function Panel({
     professional,
     fun,
     style = {},
+    isMobile = false,
 }: {
     professional: React.ReactNode;
     fun: React.ReactNode;
     style?: React.CSSProperties;
+    isMobile?: boolean;
 }) {
     const [hovered, setHovered] = useState(false);
 
@@ -195,8 +200,8 @@ function Panel({
             style={{
                 position: "relative",
                 overflow: "hidden",
-                border: PANEL_BORDER,
-                boxShadow: PANEL_SHADOW,
+                border: isMobile ? PANEL_BORDER_MOBILE : PANEL_BORDER,
+                boxShadow: isMobile ? PANEL_SHADOW_MOBILE : PANEL_SHADOW,
                 background: PRO_BG,
                 cursor: "default",
                 transition: "transform 0.2s ease, box-shadow 0.2s ease",
@@ -243,14 +248,15 @@ function Panel({
 }
 
 // ─── Image Panel ──────────────────────────────────────────────────────────────
-function ImagePanel({ style = {} }: { style?: React.CSSProperties }) {
+function ImagePanel({ style = {}, isMobile = false }: { style?: React.CSSProperties; isMobile?: boolean }) {
     const [hovered, setHovered] = useState(false);
 
     return (
         <div
             style={{
                 position: "relative", overflow: "hidden",
-                border: PANEL_BORDER, boxShadow: PANEL_SHADOW,
+                border: isMobile ? PANEL_BORDER_MOBILE : PANEL_BORDER, 
+                boxShadow: isMobile ? PANEL_SHADOW_MOBILE : PANEL_SHADOW,
                 background: "#000", cursor: "default",
                 transition: "transform 0.2s ease",
                 transform: hovered ? "scale(1.015)" : "scale(1)",
@@ -339,22 +345,23 @@ function ImagePanel({ style = {} }: { style?: React.CSSProperties }) {
 //   hero  (col 1–2, row 1)   |  img  (col 3, rows 1–2)
 //   edu   (col 1,   row 2)   |  quote(col 2, row 2)
 //   strip (col 1–3, row 3)
-function PageOne() {
+function PageOne({ isMobile }: { isMobile: boolean }) {
     return (
         <div style={{
-            width: "100%", height: "100%",
-            padding: GUTTER, boxSizing: "border-box",
+            width: "100%", height: isMobile ? "auto" : "100%",
+            padding: isMobile ? GUTTER_MOBILE : GUTTER, boxSizing: "border-box",
             display: "grid",
-            gridTemplateColumns: "1.6fr 1fr 1.1fr",
-            gridTemplateRows: "1.4fr 1fr 0.55fr",
-            gap: GUTTER,
-            overflow: "hidden",
+            gridTemplateColumns: isMobile ? "1fr" : "1.6fr 1fr 1.1fr",
+            gridTemplateRows: isMobile ? "repeat(5, auto)" : "1.4fr 1fr 0.55fr",
+            gap: isMobile ? GUTTER_MOBILE : GUTTER,
+            overflow: isMobile ? "visible" : "hidden",
             background: PRO_BG,
         }}>
 
             {/* ── Panel 1: Hero ── */}
             <Panel
-                style={{ gridColumn: "1 / 3", gridRow: "1 / 2" }}
+                isMobile={isMobile}
+                style={{ gridColumn: isMobile ? "1 / -1" : "1 / 3", gridRow: isMobile ? "auto" : "1 / 2" }}
                 professional={
                     <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: "12px", height: "100%", justifyContent: "center", padding: "4px" }}>
                         {/* B&W speed lines */}
@@ -385,11 +392,12 @@ function PageOne() {
             />
 
             {/* ── Panel 2: Image (col 3, rows 1–2) ── */}
-            <ImagePanel style={{ gridColumn: "3 / 4", gridRow: "1 / 3", minHeight: 0 }} />
+            <ImagePanel isMobile={isMobile} style={{ gridColumn: isMobile ? "1 / -1" : "3 / 4", gridRow: isMobile ? "auto" : "1 / 3", minHeight: isMobile ? "300px" : 0 }} />
 
             {/* ── Panel 3: Education ── */}
             <Panel
-                style={{ gridColumn: "1 / 2", gridRow: "2 / 3", background: PRO_INK }}
+                isMobile={isMobile}
+                style={{ gridColumn: isMobile ? "1 / -1" : "1 / 2", gridRow: isMobile ? "auto" : "2 / 3", background: PRO_INK }}
                 professional={
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                         <Caption text="Education" bw />
@@ -418,7 +426,8 @@ function PageOne() {
 
             {/* ── Panel 4: Quote accent ── */}
             <Panel
-                style={{ gridColumn: "2 / 3", gridRow: "2 / 3", background: PRO_BG }}
+                isMobile={isMobile}
+                style={{ gridColumn: isMobile ? "1 / -1" : "2 / 3", gridRow: isMobile ? "auto" : "2 / 3", background: PRO_BG }}
                 professional={
                     <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: "6px", height: "100%", justifyContent: "center" }}>
                         <div style={{ ...bwHalftone, position: "absolute", inset: 0, opacity: 0.5 }} />
@@ -445,7 +454,8 @@ function PageOne() {
 
             {/* ── Panel 5: Bottom attribute strip ── */}
             <Panel
-                style={{ gridColumn: "1 / -1", gridRow: "3 / 4", background: PRO_INK }}
+                isMobile={isMobile}
+                style={{ gridColumn: "1 / -1", gridRow: isMobile ? "auto" : "3 / 4", background: PRO_INK }}
                 professional={
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" }}>
                         <p style={{ ...BANGERS, fontSize: "clamp(1rem, 2.5vw, 2rem)", color: "#fff", textTransform: "uppercase", margin: 0, letterSpacing: "0.06em" }}>
@@ -489,22 +499,23 @@ function PageOne() {
 // Grid:  [col: 0.85fr | 1.5fr | 0.85fr]  ×  [row: 1.3fr | 1fr]
 //   p1(col1,r1)  |  p2(col2,r1)  |  p3(col3,r1)
 //   p4(col1-2,r2)              |  p5(col3,r2)
-function PageTwo() {
+function PageTwo({ isMobile }: { isMobile: boolean }) {
     return (
         <div style={{
-            width: "100%", height: "100%",
-            padding: GUTTER, boxSizing: "border-box",
+            width: "100%", height: isMobile ? "auto" : "100%",
+            padding: isMobile ? GUTTER_MOBILE : GUTTER, boxSizing: "border-box",
             display: "grid",
-            gridTemplateColumns: "0.85fr 1.5fr 0.85fr",
-            gridTemplateRows: "1.3fr 1fr",
-            gap: GUTTER,
-            overflow: "hidden",
+            gridTemplateColumns: isMobile ? "1fr" : "0.85fr 1.5fr 0.85fr",
+            gridTemplateRows: isMobile ? "repeat(5, auto)" : "1.3fr 1fr",
+            gap: isMobile ? GUTTER_MOBILE : GUTTER,
+            overflow: isMobile ? "visible" : "hidden",
             background: PRO_BG,
         }}>
 
             {/* ── Panel 1: Philosophy ── */}
             <Panel
-                style={{ gridColumn: "1 / 2", gridRow: "1 / 2", background: PRO_INK }}
+                isMobile={isMobile}
+                style={{ gridColumn: isMobile ? "1 / -1" : "1 / 2", gridRow: isMobile ? "auto" : "1 / 2", background: PRO_INK }}
                 professional={
                     <div style={{ display: "flex", flexDirection: "column", gap: "10px", height: "100%", justifyContent: "center" }}>
                         <Caption text="The Journey" bw />
@@ -529,7 +540,8 @@ function PageTwo() {
 
             {/* ── Panel 2: Skills (wide centre) ── */}
             <Panel
-                style={{ gridColumn: "2 / 3", gridRow: "1 / 2", background: PRO_BG }}
+                isMobile={isMobile}
+                style={{ gridColumn: isMobile ? "1 / -1" : "2 / 3", gridRow: isMobile ? "auto" : "1 / 2", background: PRO_BG }}
                 professional={
                     <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: "12px", height: "100%", justifyContent: "center" }}>
                         <div style={{ ...bwHalftone, position: "absolute", inset: 0, opacity: 0.55 }} />
@@ -588,7 +600,8 @@ function PageTwo() {
 
             {/* ── Panel 3: Projects ── */}
             <Panel
-                style={{ gridColumn: "3 / 4", gridRow: "1 / 2", background: PRO_INK }}
+                isMobile={isMobile}
+                style={{ gridColumn: isMobile ? "1 / -1" : "3 / 4", gridRow: isMobile ? "auto" : "1 / 2", background: PRO_INK }}
                 professional={
                     <div style={{ display: "flex", flexDirection: "column", gap: "10px", height: "100%", justifyContent: "center" }}>
                         <Caption text="Projects" bw />
@@ -629,7 +642,8 @@ function PageTwo() {
 
             {/* ── Panel 4: Future Vision (wide bottom-left) ── */}
             <Panel
-                style={{ gridColumn: "1 / 3", gridRow: "2 / 3", background: PRO_BG }}
+                isMobile={isMobile}
+                style={{ gridColumn: isMobile ? "1 / -1" : "1 / 3", gridRow: isMobile ? "auto" : "2 / 3", background: PRO_BG }}
                 professional={
                     <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "20px", height: "100%" }}>
                         <SpeedLines color="rgba(0,0,0,0.04)" />
@@ -673,7 +687,8 @@ function PageTwo() {
 
             {/* ── Panel 5: Year accent (bottom-right) ── */}
             <Panel
-                style={{ gridColumn: "3 / 4", gridRow: "2 / 3", background: PRO_BG }}
+                isMobile={isMobile}
+                style={{ gridColumn: isMobile ? "1 / -1" : "3 / 4", gridRow: isMobile ? "auto" : "2 / 3", background: PRO_BG }}
                 professional={
                     <div style={{ display: "flex", flexDirection: "column", gap: "8px", alignItems: "center", justifyContent: "center", height: "100%", textAlign: "center" }}>
                         <div style={{ ...bwHalftone, position: "absolute", inset: 0, opacity: 0.5 }} />
@@ -702,6 +717,14 @@ function PageTwo() {
 // ─── Root Export ───────────────────────────────────────────────────────────────
 export default function AboutSection() {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -709,11 +732,15 @@ export default function AboutSection() {
     });
 
     const x = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
+    const scrollHintOpacity = useTransform(scrollYProgress, [0, 0.15], [0.6, 0]);
     const [pageIndex, setPageIndex] = useState(0);
 
     useEffect(() => {
+        if (isMobile) {
+            return scrollYProgress.on("change", v => setPageIndex(v > 0.5 ? 1 : 0));
+        }
         return scrollYProgress.on("change", v => setPageIndex(v > 0.45 ? 1 : 0));
-    }, [scrollYProgress]);
+    }, [scrollYProgress, isMobile]);
 
     const HeaderBar = ({ vol }: { vol: "I" | "II" }) => (
         <div style={{
@@ -736,61 +763,65 @@ export default function AboutSection() {
         <section
             id="about"
             ref={containerRef}
-            style={{ height: "300vh", background: PRO_BG, position: "relative", zIndex: 20 }}
+            style={{ height: isMobile ? "auto" : "300vh", background: PRO_BG, position: "relative", zIndex: 20 }}
         >
-            <div style={{ position: "sticky", top: 0, height: "100vh", width: "100%", overflow: "hidden" }}>
+            <div style={{ position: isMobile ? "relative" : "sticky", top: 0, height: isMobile ? "auto" : "100vh", width: "100%", overflow: isMobile ? "visible" : "hidden" }}>
 
-                <motion.div style={{ x, display: "flex", width: "200vw", height: "100%" }}>
+                <motion.div style={{ x: isMobile ? 0 : x, display: "flex", flexDirection: isMobile ? "column" : "row", width: isMobile ? "100%" : "200vw", height: isMobile ? "auto" : "100%" }}>
 
                     {/* ── Page 1 ── */}
-                    <div style={{ width: "100vw", height: "100%", flexShrink: 0, overflow: "hidden", background: PRO_BG, position: "relative" }}>
+                    <div style={{ width: isMobile ? "100%" : "100vw", height: isMobile ? "auto" : "100%", flexShrink: 0, overflow: "hidden", background: PRO_BG, position: "relative" }}>
                         <HeaderBar vol="I" />
-                        <div style={{ paddingTop: "44px", height: "100%", boxSizing: "border-box", overflow: "hidden" }}>
-                            <PageOne />
+                        <div style={{ paddingTop: "44px", height: isMobile ? "auto" : "100%", boxSizing: "border-box", overflow: "hidden" }}>
+                            <PageOne isMobile={isMobile} />
                         </div>
                     </div>
 
                     {/* ── Page 2 ── */}
-                    <div style={{ width: "100vw", height: "100%", flexShrink: 0, overflow: "hidden", background: PRO_BG, position: "relative" }}>
+                    <div style={{ width: isMobile ? "100%" : "100vw", height: isMobile ? "auto" : "100%", flexShrink: 0, overflow: "hidden", background: PRO_BG, position: "relative" }}>
                         <HeaderBar vol="II" />
-                        <div style={{ paddingTop: "44px", height: "100%", boxSizing: "border-box", overflow: "hidden" }}>
-                            <PageTwo />
+                        <div style={{ paddingTop: "44px", height: isMobile ? "auto" : "100%", boxSizing: "border-box", overflow: "hidden" }}>
+                            <PageTwo isMobile={isMobile} />
                         </div>
                     </div>
 
                 </motion.div>
 
-                {/* Navigation dots */}
-                <div style={{
-                    position: "absolute", bottom: "16px", left: "50%", transform: "translateX(-50%)",
-                    zIndex: 50, display: "flex", alignItems: "center", gap: "36px", pointerEvents: "none",
-                }}>
-                    {["The Origin", "The Journey"].map((label, i) => (
-                        <div key={label} style={{
-                            display: "flex", flexDirection: "column", alignItems: "center", gap: "5px",
-                            transition: "all 0.3s ease",
-                            opacity: pageIndex === i ? 1 : 0.3,
-                            transform: pageIndex === i ? "scale(1.1)" : "scale(0.9)",
-                        }}>
-                            <span style={{ fontSize: "8px", fontWeight: 900, letterSpacing: "0.3em", textTransform: "uppercase", color: "#000", fontFamily: "'Arial Black', sans-serif" }}>
-                                {label}
-                            </span>
-                            <div style={{ width: "44px", height: "5px", background: "#000", borderRadius: "2px", boxShadow: "3px 3px 0 rgba(0,0,0,0.2)" }} />
-                        </div>
-                    ))}
-                </div>
+                {/* Navigation dots (Only on Desktop) */}
+                {!isMobile && (
+                    <div style={{
+                        position: "absolute", bottom: "16px", left: "50%", transform: "translateX(-50%)",
+                        zIndex: 50, display: "flex", alignItems: "center", gap: "36px", pointerEvents: "none",
+                    }}>
+                        {["The Origin", "The Journey"].map((label, i) => (
+                            <div key={label} style={{
+                                display: "flex", flexDirection: "column", alignItems: "center", gap: "5px",
+                                transition: "all 0.3s ease",
+                                opacity: pageIndex === i ? 1 : 0.3,
+                                transform: pageIndex === i ? "scale(1.1)" : "scale(0.9)",
+                            }}>
+                                <span style={{ fontSize: "8px", fontWeight: 900, letterSpacing: "0.3em", textTransform: "uppercase", color: "#000", fontFamily: "'Arial Black', sans-serif" }}>
+                                    {label}
+                                </span>
+                                <div style={{ width: "44px", height: "5px", background: "#000", borderRadius: "2px", boxShadow: "3px 3px 0 rgba(0,0,0,0.2)" }} />
+                            </div>
+                        ))}
+                    </div>
+                )}
 
-                {/* Scroll hint */}
-                <motion.div style={{
-                    opacity: useTransform(scrollYProgress, [0, 0.15], [0.6, 0]),
-                    position: "absolute", right: "24px", top: "50%", y: "-50%",
-                    zIndex: 50, display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", pointerEvents: "none",
-                }}>
-                    <span style={{ fontSize: "8px", fontWeight: 900, letterSpacing: "0.2em", writingMode: "vertical-lr", color: "#000", textTransform: "uppercase", fontFamily: "'Arial Black', sans-serif" }}>
-                        Scroll Down
-                    </span>
-                    <div style={{ width: "1px", height: "44px", background: "#000" }} />
-                </motion.div>
+                {/* Scroll hint (Only on Desktop) */}
+                {!isMobile && (
+                    <motion.div style={{
+                        opacity: scrollHintOpacity,
+                        position: "absolute", right: "24px", top: "50%", y: "-50%",
+                        zIndex: 50, display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", pointerEvents: "none",
+                    }}>
+                        <span style={{ fontSize: "8px", fontWeight: 900, letterSpacing: "0.2em", writingMode: "vertical-lr", color: "#000", textTransform: "uppercase", fontFamily: "'Arial Black', sans-serif" }}>
+                            Scroll Down
+                        </span>
+                        <div style={{ width: "1px", height: "44px", background: "#000" }} />
+                    </motion.div>
+                )}
 
             </div>
         </section>

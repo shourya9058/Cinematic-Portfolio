@@ -259,7 +259,7 @@ export default function ContactSection() {
                         >
                             <RevealText delay={0.3}>
                                 <h2
-                                    className="text-4xl md:text-6xl lg:text-8xl font-thin tracking-[-0.02em] text-white/90 leading-none uppercase"
+                                    className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-thin tracking-[-0.02em] text-white/90 leading-none uppercase"
                                     style={{ fontFamily: "'Inter', sans-serif" }}
                                 >
                                     Let's Build
@@ -267,7 +267,7 @@ export default function ContactSection() {
                             </RevealText>
                             <RevealText delay={0.4}>
                                 <h2
-                                    className="text-5xl md:text-7xl lg:text-9xl font-black tracking-[-0.05em] text-white leading-[0.85] uppercase italic"
+                                    className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-black tracking-[-0.05em] text-white leading-[0.85] uppercase italic"
                                     style={{ fontFamily: "'Inter', sans-serif" }}
                                 >
                                     Something
@@ -275,7 +275,7 @@ export default function ContactSection() {
                             </RevealText>
                             <RevealText delay={0.5}>
                                 <h2
-                                    className="text-4xl md:text-6xl lg:text-8xl font-black tracking-[-0.05em] text-crimson leading-[0.85] uppercase relative inline-block group"
+                                    className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black tracking-[-0.05em] text-crimson leading-[0.85] uppercase relative inline-block group"
                                     style={{
                                         fontFamily: "'Inter', sans-serif",
                                         textShadow: "0 0 30px rgba(139,0,0,0.3)"

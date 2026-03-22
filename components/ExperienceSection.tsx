@@ -239,7 +239,7 @@ export default function ExperienceSection() {
     ], []);
 
     return (
-        <section ref={containerRef} className="relative min-h-[500vh] bg-[#0B0B0F] overflow-hidden py-32">
+        <section ref={containerRef} className="relative min-h-[500vh] bg-[#0B0B0F] overflow-hidden py-20 md:py-32">
 
             {/* Background Map Imprint & Animated Technical HUD */}
             <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
@@ -322,7 +322,7 @@ export default function ExperienceSection() {
             </div>
 
             <div className="max-w-7xl mx-auto relative z-20 px-4 md:px-10">
-                <div className="text-center mb-80">
+                <div className="text-center mb-40 md:mb-80">
                     <motion.div
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
@@ -331,7 +331,7 @@ export default function ExperienceSection() {
                         <span className="px-4 py-1 border border-crimson/30 text-crimson font-mono tracking-[0.5em] text-[10px] uppercase rounded-full bg-crimson/5">
                             Journey Mapping v2.5
                         </span>
-                        <h2 className="text-6xl md:text-9xl font-black text-white tracking-tighter leading-none">
+                        <h2 className="text-4xl sm:text-6xl md:text-9xl font-black text-white tracking-tighter leading-none uppercase">
                             ROAD TO<br />
                             <span className="text-transparent text-outline opacity-40 italic">MASTERY</span>
                         </h2>

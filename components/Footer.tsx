@@ -36,7 +36,7 @@ export default function Footer() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.8 }}
                         >
-                            <h2 className="text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.85] tracking-tighter text-white font-syncopate">
+                            <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.85] tracking-tighter text-white font-syncopate uppercase italic">
                                 SHOURYA<br />SINGH<span className="text-[#8B0000]">.</span>
                             </h2>
                             <p className="mt-6 text-gray-500 max-w-sm text-sm leading-relaxed font-medium uppercase tracking-wider">
@@ -105,7 +105,7 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+                <div className="pt-12 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-8 text-center lg:text-left">
                     <div className="text-[10px] font-mono tracking-[0.3em] text-white/20 uppercase">
                         © {currentYear} Shourya Singh · All Rights Reserved
                     </div>
@@ -125,7 +125,7 @@ export default function Footer() {
 
             {/* Decorative Silhouette / Large Text Background */}
             <div className="absolute -bottom-20 -right-20 pointer-events-none select-none opacity-[0.02]">
-                <h2 className="text-[20rem] font-black text-white italic tracking-tighter leading-none">
+                <h2 className="text-[10rem] sm:text-[15rem] md:text-[20rem] font-black text-white italic tracking-tighter leading-none">
                     SS
                 </h2>
             </div>

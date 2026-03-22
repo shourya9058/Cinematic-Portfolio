@@ -43,29 +43,38 @@ function ScrollFillText({ text, container, className = "" }: { text: string; con
         const wordsEls = ref.current.querySelectorAll(".word-span");
         
         const ctx = gsap.context(() => {
-            gsap.fromTo(wordsEls, 
-                { 
-                    opacity: 0.15, 
-                    color: "rgba(255,255,255,0.05)",
-                    y: 5,
-                    scale: 0.96
-                },
-                {
-                    opacity: 1,
-                    color: "#8B0000",
-                    y: 0,
-                    scale: 1,
-                    stagger: 0.1,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: ref.current,
-                        scroller: container.current,
-                        start: "top 80%",
-                        end: "top 20%",
-                        scrub: 1,
+            const mm = gsap.matchMedia();
+
+            mm.add({
+                isMobile: "(max-width: 768px)",
+                isDesktop: "(min-width: 769px)"
+            }, (context) => {
+                const { isMobile } = context.conditions as any;
+
+                gsap.fromTo(wordsEls, 
+                    { 
+                        opacity: 0.15, 
+                        color: "rgba(255,255,255,0.05)",
+                        y: 5,
+                        scale: 0.96
+                    },
+                    {
+                        opacity: 1,
+                        color: "#8B0000",
+                        y: 0,
+                        scale: 1,
+                        stagger: 0.1,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: ref.current,
+                            scroller: container.current,
+                            start: isMobile ? "top 95%" : "top 80%",
+                            end: isMobile ? "top 30%" : "top 20%",
+                            scrub: 1,
+                        }
                     }
-                }
-            );
+                );
+            });
         }, ref);
 
         return () => ctx.revert();
@@ -93,19 +102,17 @@ function WatermarkTitle({ title, container }: { title: string; container?: React
         if (!ref.current || !container?.current || !textRef.current) return;
 
         const ctx = gsap.context(() => {
-            // Cinematic parallax and fade
+            // Cinematic parallax and fade — only transform+opacity (GPU composited)
             gsap.fromTo(textRef.current,
                 { 
                     x: "8%", 
                     opacity: 0, 
                     scale: 0.9,
-                    filter: "blur(10px)"
                 },
                 {
                     x: "-8%",
-                    opacity: 0.7, // Increased from 0.45 for better visibility
+                    opacity: 0.7,
                     scale: 1.1,
-                    filter: "blur(0px)",
                     ease: "none",
                     scrollTrigger: {
                         trigger: ref.current,
@@ -116,15 +123,7 @@ function WatermarkTitle({ title, container }: { title: string; container?: React
                     }
                 }
             );
-
-            // Floating animation independent of scroll
-            gsap.to(textRef.current, {
-                y: -20,
-                duration: 5,
-                repeat: -1,
-                yoyo: true,
-                ease: "power1.inOut"
-            });
+            // Floating is handled via CSS animation (compositor thread, no JS timer)
         }, ref);
 
         return () => ctx.revert();
@@ -135,8 +134,10 @@ function WatermarkTitle({ title, container }: { title: string; container?: React
             <h2
                 ref={textRef}
                 style={{
-                    WebkitTextStroke: "2px rgba(255,255,255,0.6)", // Thicker stroke
-                    color: "rgba(255,255,255,0.05)", // Subtle fill instead of transparent
+                    WebkitTextStroke: "2px rgba(255,255,255,0.6)",
+                    color: "rgba(255,255,255,0.05)",
+                    willChange: "transform, opacity",
+                    animation: "watermarkFloat 5s ease-in-out infinite alternate",
                 }}
                 className="text-[48vw] leading-none font-black tracking-[-0.04em] whitespace-nowrap font-syncopate uppercase select-none relative"
             >
@@ -192,13 +193,19 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
         if (direction === "down" && !isTransitioned) {
             setIsTransitioned(true);
             setIsAnimating(true);
-            setTimeout(() => setIsAnimating(false), 800);
+            setTimeout(() => {
+                setIsAnimating(false);
+                ScrollTrigger.refresh();
+            }, 800);
         } else if (direction === "up" && isTransitioned) {
             // Only return to hero if at the very top of the card
             if (scrollContainerRef.current && scrollContainerRef.current.scrollTop <= 5) {
                 setIsTransitioned(false);
                 setIsAnimating(true);
-                setTimeout(() => setIsAnimating(false), 800);
+                setTimeout(() => {
+                    setIsAnimating(false);
+                    ScrollTrigger.refresh();
+                }, 800);
             }
         }
     };
@@ -231,11 +238,11 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
             <motion.div
                 animate={{
                     scale: isTransitioned ? 0.92 : 1,
-                    filter: isTransitioned ? "blur(8px) brightness(0.7)" : "blur(0px) brightness(1)",
-                    opacity: isTransitioned ? 0.6 : 1
+                    opacity: isTransitioned ? 0.5 : 1
                 }}
                 transition={springConfig}
                 className="absolute inset-0 z-0 h-full w-full"
+                style={{ willChange: "transform, opacity" }}
             >
                 {slides.slice(0, 1).map((slide) => (
                     <section
@@ -309,7 +316,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                 animate={{ y: isTransitioned ? "0vh" : "100vh" }}
                 transition={springConfig}
                 className="absolute inset-0 z-[100] w-full h-full overflow-y-auto bg-[#0B0B11] shadow-[0_-20px_80px_rgba(0,0,0,0.8)]"
-                style={{ WebkitOverflowScrolling: "touch" }}
+                style={{ WebkitOverflowScrolling: "touch", willChange: "transform" }}
             >
                 <div className="relative">
                     {/* Subsequent Slides */}

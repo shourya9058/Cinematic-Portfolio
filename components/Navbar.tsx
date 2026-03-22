@@ -95,7 +95,7 @@ export default function Navbar() {
                         document.getElementById("home")?.scrollIntoView({ behavior: "smooth" });
                     }}
                 >
-                    <div className="relative w-24 h-12 md:w-32 md:h-16 flex items-center justify-center overflow-visible">
+                    <div className="relative w-28 h-14 md:w-32 md:h-16 flex items-center justify-center overflow-visible">
                         <div className="absolute inset-0 bg-crimson/30 blur-2xl rounded-full scale-[1.8] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                         <Logo className="w-full h-full text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] group-hover:drop-shadow-[0_0_20px_#8B0000] transition-all duration-500 scale-[1.4]" />
                     </div>
@@ -167,50 +167,78 @@ export default function Navbar() {
                         initial={{ opacity: 0, x: "100%" }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: "100%" }}
-                        transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                        transition={{ type: "spring", damping: 30, stiffness: 200 }}
                         className="fixed inset-0 z-[95] bg-[#0B0B0F] md:hidden pointer-events-auto"
                     >
-                        <div className="h-full flex flex-col items-center justify-center gap-8 p-12 relative">
+                        {/* Decorative background text */}
+                        <div className="absolute inset-0 z-0 opacity-[0.03] flex items-center justify-center pointer-events-none select-none">
+                            <h2 className="text-[30vw] font-black text-white italic tracking-tighter leading-none">
+                                SS
+                            </h2>
+                        </div>
+
+                        <div className="h-full flex flex-col items-center justify-center gap-12 p-12 relative z-10">
                             {/* Close Label */}
                             <motion.span
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="absolute top-10 right-24 text-[10px] font-mono tracking-[0.5em] text-crimson uppercase"
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.2 }}
+                                className="absolute top-12 right-12 text-[10px] font-mono tracking-[0.5em] text-crimson uppercase"
                             >
-                                Close
+                                Menu
                             </motion.span>
 
-                            {navLinks.map((link, i) => (
-                                <motion.a
-                                    key={link.name}
-                                    href={link.href}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: i * 0.1 }}
-                                    className={`text-2xl font-black uppercase tracking-[0.2em] ${activeSection === link.href.substring(1) ? "text-crimson" : "text-white/50"}`}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setIsMobileMenuOpen(false);
-                                        const element = document.getElementById(link.href.substring(1));
-                                        element?.scrollIntoView({ behavior: "smooth" });
-                                    }}
-                                >
-                                    {link.name}
-                                </motion.a>
-                            ))}
+                            <div className="flex flex-col items-center gap-6">
+                                {navLinks.map((link, i) => (
+                                    <motion.a
+                                        key={link.name}
+                                        href={link.href}
+                                        initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+                                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                                        transition={{ delay: i * 0.1 + 0.3, duration: 0.6 }}
+                                        className={`text-4xl font-black uppercase tracking-tighter transition-all duration-300 ${activeSection === link.href.substring(1) ? "text-crimson scale-110" : "text-white/40 hover:text-white"}`}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setIsMobileMenuOpen(false);
+                                            const element = document.getElementById(link.href.substring(1));
+                                            element?.scrollIntoView({ behavior: "smooth" });
+                                        }}
+                                    >
+                                        <div className="flex flex-col items-center">
+                                            <span className="text-[8px] font-mono text-crimson/50 tracking-[0.5em] mb-1">0{i + 1}</span>
+                                            {link.name}
+                                        </div>
+                                    </motion.a>
+                                ))}
+                            </div>
 
                             <motion.button
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: navLinks.length * 0.1 }}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: 0.8 }}
                                 onClick={() => {
                                     setIsMobileMenuOpen(false);
                                     setIsResumeOpen(true);
                                 }}
-                                className="mt-4 px-12 py-4 rounded-full border border-crimson bg-crimson text-white text-lg font-black uppercase tracking-[0.2em]"
+                                className="mt-8 px-10 py-4 rounded-full border border-crimson/30 bg-crimson/5 text-crimson text-xs font-black uppercase tracking-[0.3em] hover:bg-crimson hover:text-white transition-all duration-500 shadow-xl shadow-crimson/10"
                             >
                                 Resume
                             </motion.button>
+
+                            {/* Social Links at Bottom of Menu */}
+                            <div className="absolute bottom-12 flex gap-8">
+                                {["GH", "LI", "TW"].map((social, i) => (
+                                    <motion.span 
+                                        key={social}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 0.3 }}
+                                        transition={{ delay: 1 + (i * 0.1) }}
+                                        className="text-[10px] font-mono tracking-widest text-white uppercase"
+                                    >
+                                        {social}
+                                    </motion.span>
+                                ))}
+                            </div>
                         </div>
                     </motion.div>
                 )}
