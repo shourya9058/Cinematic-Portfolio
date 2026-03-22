@@ -1,54 +1,185 @@
-# Shourya Singh | Full Stack Developer
+<div align="center">
 
-A high-end, cinematic, and fully-responsive scrollytelling portfolio showcasing creative development work, modern web experiences, and full-stack capabilities. 
+<br />
 
-Built with Next.js, Framer Motion, Tailwind CSS, and a custom WebGL/Three.js-inspired aesthetics system.
+```
+╔══════════════════════════════════════════════════════╗
+║                                                      ║
+║       S H O U R Y A   S I N G H   ·   2 0 2 6       ║
+║          FULL STACK DEVELOPER · PORTFOLIO            ║
+║                                                      ║
+╚══════════════════════════════════════════════════════╝
+```
 
-![Portfolio Preview](./public/favicon.svg) <!-- Replace with an actual screenshot when deployed -->
+<br />
 
-## 🚀 Features
+# ⬛ CINEMATIC PORTFOLIO
 
-*   **Cinematic Scrollytelling:** Immersive, narrative-driven project walkthroughs using GSAP/Framer Motion scroll-linked animations.
-*   **Dynamic Custom Cursor:** Interactive custom cursor that intelligently adapts its state (hover, click, drag) based on the DOM element it interacts with.
-*   **Interactive WebGL/Canvas Elements:** Performance-optimized visual set pieces that react to user scroll and pointer data.
-*   **Fully Responsive Architecture:** Pixel-perfect experiences across mobile, tablet, and ultra-wide desktop displays.
-*   **Modern Tech Stack:** React 18, Next.js 14 (App Router), TypeScript, Tailwind CSS.
-*   **Optimized Performance:** Image optimization, code-splitting, and minimal JavaScript overhead for maximum Lighthouse scores.
-*   **Secure Contact & Application System:** Integrated secure messaging using EmailJS and reCAPTCHA with rate-limiting and robust validation.
+### *A high-fidelity, scrollytelling portfolio built for impact.*
 
-## 🛠️ Technology Stack
+<br/>
 
-*   **Framework:** Next.js (App Directory)
-*   **Language:** TypeScript
-*   **Styling:** Tailwind CSS
-*   **Animation:** Framer Motion, GSAP (if applicable)
-*   **Deployment:** Vercel or Render
+[![Next.js](https://img.shields.io/badge/Next.js_15-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-EF008F?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/)
+[![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=black)](https://greensock.com/gsap/)
 
-### Deploying on Render
+<br/>
 
-To deploy this Next.js project on Render, follow these steps:
-1. Create a new **Web Service** on Render and connect this GitHub repository.
-2. In the "Build Command" field, enter: `npm install && npm run build`
-3. In the "Start Command" field, enter: `npm start`
-4. Expand **Advanced** and add any necessary Environment Variables (e.g., your EmailJS keys).
-5. Click **Create Web Service**.
+> *"Building reliable systems while crafting clean and engaging digital experiences."*
 
-## 📋 Legal & Usage Rights
+<br/>
 
-> [!WARNING]
-> **PROPRIETARY SOFTWARE - NO UNAUTHORIZED USE**
+[![Live Demo](https://img.shields.io/badge/⬥%20LIVE%20DEMO-8B0000?style=for-the-badge)](https://shourya-singh-portfolio.vercel.app/)
+[![GitHub](https://img.shields.io/badge/Source%20Code-181717?style=for-the-badge&logo=github)](https://github.com/shourya9058/Cinematic-Portfolio)
 
-This repository and all its contents (code, assets, design, animations, structure) are the sole intellectual property of Shourya Singh. 
-
-**STRICTLY FORBIDDEN:**
-*   You may **NOT** copy, clone, download, or reproduce this code in any form.
-*   You may **NOT** use any portion of this design, its animations, or its structure for your own projects, commercial or non-commercial.
-*   You may **NOT** fork this repository.
-
-This project is intended strictly as a portfolio piece to be viewed by prospective employers, clients, and collaborators.
-
-See the `LICENSE` file for more details.
+</div>
 
 ---
 
-*Designed & Engineered by [Shourya Singh](https://github.com/Shourya-Singh-07)*
+<br/>
+
+## ▌ THE VISION
+
+This isn't a resume — it's an **experience**.
+
+Designed as a cinematic, scrollytelling journey through my work and identity as a Full Stack Developer. Every section is a scene. Every interaction is intentional. Built with performance, aesthetics, and storytelling as core pillars.
+
+<br/>
+
+## ▌ ARCHITECTURE
+
+```
+Portfolio 2026/
+├── app/                        # Next.js App Router
+│   ├── page.tsx                # Main page — all sections composed here
+│   ├── layout.tsx              # Root layout & font setup
+│   ├── globals.css             # Design tokens, keyframes, global styles
+│   └── projects/[slug]/        # Dynamic project detail pages
+│       └── page.tsx            # Scroll-driven cinematic project showcase
+│
+├── components/                 # Feature components
+│   ├── Navbar.tsx              # Sticky nav with scroll-hide + mobile overlay
+│   ├── Overlay.tsx             # Hero section with parallax typography
+│   ├── ScrollyCanvas.tsx       # 120-frame image sequence (Hero)
+│   ├── ScrollStorySection.tsx  # Cinematic horizontal scroll reveal
+│   ├── AboutSection.tsx        # Comic-panel dual-layout about section
+│   ├── SkillsSection.tsx       # 120-frame image sequence (Skills)
+│   ├── SkillOverlay.tsx        # HUD-style skill labels over canvas
+│   ├── ExperienceSection.tsx   # Animated road-to-mastery timeline
+│   ├── Projects.tsx            # Scrollytelling project grid
+│   ├── ProjectCard.tsx         # Individual project card with parallax
+│   ├── ContactSection.tsx      # Animated contact form with EmailJS
+│   ├── Footer.tsx              # Brand footer with social links
+│   ├── Preloader.tsx           # Asset-aware cinematic preloader
+│   └── ProjectDetail/          # Project page building blocks
+│       ├── ScrollClipImage.tsx # GPU-accelerated clip-path scroll wipe
+│       └── MediaCarousel3D.tsx # Physics-based 3D media carousel
+│
+└── constants/
+    └── projects.ts             # All project data in one place
+```
+
+<br/>
+
+## ▌ FEATURE HIGHLIGHTS
+
+| Feature | Description |
+|---|---|
+| **Image Sequences** | 120-frame canvas-rendered sequences for Hero & Skills sections, driven by scroll position — no video files |
+| **Scroll-driven Story** | Cinematic horizontal text reveals mapped directly to scroll progress via Framer Motion |
+| **Comic Panel About** | Dual-layer panel system with B&W → Colour hover transitions, responsive to mobile |
+| **3D Carousel** | Physics-simulated card carousel with drag, swipe, and keyboard navigation |
+| **Clip-path Wipe** | GPU-composited `clip-path` scroll wipe between project slides, powered by GSAP ScrollTrigger |
+| **Scroll Fill Text** | Per-word reveal animation on the project overview, timed precisely to scroll position |
+| **EmailJS Contact** | Fully validated contact form with rate limiting, honeypot, profanity filtering, and success states |
+| **Cinematic Preloader** | Asset-aware preloader that waits for all image sequences before revealing the site |
+| **Mobile Responsive** | Cinematic experience maintained across all viewport sizes — desktop UI unchanged |
+
+<br/>
+
+## ▌ TECH STACK
+
+```
+FRONTEND          Next.js 15  ·  TypeScript  ·  Tailwind CSS
+ANIMATION         Framer Motion  ·  GSAP + ScrollTrigger
+RENDERING         Canvas API (image sequences)  ·  CSS Compositor Layer (will-change)
+FORMS             EmailJS
+FONTS             Inter  ·  Syncopate  ·  Bangers (Google Fonts)
+DEPLOYMENT        Vercel
+```
+
+<br/>
+
+## ▌ GETTING STARTED
+
+### Prerequisites
+- Node.js `v18+`
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/shourya9058/Cinematic-Portfolio.git
+
+# Navigate to the project
+cd Cinematic-Portfolio
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+> **Note:** The image sequence frames (`/public/sequence/` and `/public/sequence2/`) are required for the canvas animations. Ensure they are present or the preloader will wait indefinitely.
+
+<br/>
+
+## ▌ PERFORMANCE
+
+This portfolio was engineered for zero compromise between aesthetics and speed.
+
+- ✦ **GPU-composited animations** — `will-change: transform` on all major layers
+- ✦ **Compositor-thread floating** — CSS `@keyframes` instead of GSAP repeat loops
+- ✦ **No `filter: blur` on transitions** — replaced with `scale + opacity` (fully composited)
+- ✦ **`overflow-x: clip`** — zero horizontal overflow without breaking `position: sticky`
+- ✦ **Scroll-away Navbar** — hides on downscroll to give content full breathing room
+
+<br/>
+
+## ▌ CONTACT
+
+<div align="center">
+
+**Shourya Singh**
+*Full Stack Developer · Computer Science 2026*
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/shaurya-singh007/)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Shourya-Singh-07)
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/_shauryasingh__)
+
+<br/>
+
+*Built with obsession. Deployed with precision.*
+
+```
+███████╗██╗  ██╗ ██████╗ ██╗   ██╗██████╗ ██╗   ██╗ █████╗
+██╔════╝██║  ██║██╔═══██╗██║   ██║██╔══██╗╚██╗ ██╔╝██╔══██╗
+███████╗███████║██║   ██║██║   ██║██████╔╝ ╚████╔╝ ███████║
+╚════██║██╔══██║██║   ██║██║   ██║██╔══██╗  ╚██╔╝  ██╔══██║
+███████║██║  ██║╚██████╔╝╚██████╔╝██║  ██║   ██║   ██║  ██║
+╚══════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝
+```
+
+</div>
+
+---
+
+<div align="center">
+<sub>© 2026 Shourya Singh · All Rights Reserved</sub>
+</div>
