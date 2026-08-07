@@ -73,7 +73,7 @@ const SkillOverlay: React.FC<SkillOverlayProps> = ({ progress }) => {
             >
                 <motion.div style={{ opacity: dim1 }}>
                     <h3 className="text-lg md:text-3xl mb-1 md:mb-2 text-[#EAEAEA] tracking-wider">FRONTEND DEVELOPMENT</h3>
-                    <p className="text-[10px] md:text-base text-gray-500 max-w-[300px] md:max-w-[400px] leading-relaxed">HTML5 • CSS3 • JavaScript • React • TailwindCSS • Bootstrap • Responsive UI</p>
+                    <p className="text-[10px] md:text-base text-gray-500 max-w-[300px] md:max-w-[450px] leading-relaxed">React • TypeScript • JavaScript • HTML5 • CSS3 • TailwindCSS • Responsive UI</p>
                     <div className="h-[1px] w-8 md:w-12 bg-[#8B0000] mt-2 md:mt-3" />
                 </motion.div>
             </motion.div>
@@ -85,7 +85,7 @@ const SkillOverlay: React.FC<SkillOverlayProps> = ({ progress }) => {
             >
                 <motion.div style={{ opacity: dim2 }}>
                     <h3 className="text-lg md:text-3xl mb-1 md:mb-2 text-[#EAEAEA] tracking-wider">BACKEND & DATABASE</h3>
-                    <p className="text-[10px] md:text-base text-gray-500 max-w-[300px] md:max-w-[400px] leading-relaxed ml-auto">Node.js • Express.js • REST APIs • MongoDB • Mongoose • MySQL • Authentication</p>
+                    <p className="text-[10px] md:text-base text-gray-500 max-w-[300px] md:max-w-[450px] leading-relaxed ml-auto">Node.js • Express.js • Prisma ORM • MySQL • Zod • REST APIs • MongoDB</p>
                     <div className="h-[1px] w-8 md:w-12 bg-[#8B0000] mt-2 md:mt-3 ml-auto" />
                 </motion.div>
             </motion.div>
@@ -96,8 +96,8 @@ const SkillOverlay: React.FC<SkillOverlayProps> = ({ progress }) => {
                 className="absolute left-[5%] md:left-[12%] bottom-[25%] md:bottom-[20%] text-left max-w-[85%] md:max-w-none"
             >
                 <motion.div style={{ opacity: dim4 }}>
-                    <h3 className="text-base md:text-2xl mb-1 md:mb-2 text-[#EAEAEA] tracking-wider">TOOLS & TECHNOLOGIES</h3>
-                    <p className="text-[10px] md:text-base text-gray-500 max-w-[280px] md:max-w-[400px] leading-relaxed">Git • GitHub • Postman • VS Code • Cloudinary • Multer • Passport.js</p>
+                    <h3 className="text-base md:text-2xl mb-1 md:mb-2 text-[#EAEAEA] tracking-wider">TOOLS & WORKFLOWS</h3>
+                    <p className="text-[10px] md:text-base text-gray-500 max-w-[280px] md:max-w-[450px] leading-relaxed">Git • pnpm • Monorepo • Postman • VS Code • Cloudinary • Multer</p>
                     <div className="h-[1px] w-8 md:w-12 bg-[#8B0000] mt-2 md:mt-3" />
                 </motion.div>
             </motion.div>
@@ -108,7 +108,7 @@ const SkillOverlay: React.FC<SkillOverlayProps> = ({ progress }) => {
                 className="absolute right-[5%] md:right-[12%] bottom-[32%] md:bottom-[25%] text-right max-w-[85%] md:max-w-none"
             >
                 <h3 className="text-base md:text-2xl mb-1 md:mb-2 text-[#EAEAEA] tracking-wider">PROGRAMMING LANGUAGES</h3>
-                <p className="text-[10px] md:text-base text-gray-500 max-w-[250px] md:max-w-[300px] leading-relaxed ml-auto">JavaScript • C++ • Python • SQL</p>
+                <p className="text-[10px] md:text-base text-gray-500 max-w-[250px] md:max-w-[350px] leading-relaxed ml-auto">TypeScript • JavaScript • SQL • C++ • Python</p>
                 <div className="h-[1px] w-8 md:w-12 bg-[#8B0000] mt-2 md:mt-3 ml-auto" />
             </motion.div>
 
@@ -118,9 +118,9 @@ const SkillOverlay: React.FC<SkillOverlayProps> = ({ progress }) => {
                 className="text-center px-4"
             >
                 <motion.span className="text-[8px] md:text-xs tracking-[0.5em] text-[#8B0000] mb-3 md:mb-4 block">SYSTEM IDENTIFIED</motion.span>
-                <h2 className="text-3xl md:text-7xl mb-4 md:mb-6 tracking-[0.2em] font-black text-white leading-tight">MERN FULL STACK DEVELOPER</h2>
+                <h2 className="text-3xl md:text-7xl mb-4 md:mb-6 tracking-[0.2em] font-black text-white leading-tight">ENTERPRISE FULL STACK DEVELOPER</h2>
                 <div className="flex flex-col items-center gap-2">
-                    <p className="text-[10px] md:text-xl text-gray-400 max-w-[90%] md:max-w-[800px] tracking-widest leading-loose">MONGODB • EXPRESS • REACT • NODE.JS • REST APIS • FULL STACK ARCHITECTURE</p>
+                    <p className="text-[10px] md:text-xl text-gray-400 max-w-[90%] md:max-w-[850px] tracking-widest leading-loose">REACT • TYPESCRIPT • NODE.JS • PRISMA ORM • MYSQL • ZOD • REST APIS • MONOREPO</p>
                     <div className="h-[1px] md:h-[2px] w-32 md:w-48 bg-[#8B0000] mt-6 md:mt-8 shadow-[0_0_20px_rgba(139,0,0,0.8)]" />
                 </div>
             </motion.div>

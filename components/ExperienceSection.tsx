@@ -18,6 +18,23 @@ interface Experience {
 const experiences: Experience[] = [
     {
         id: 1,
+        period: "April 2026 – Present",
+        role: "Full Stack Developer 1",
+        company: "Sepfust Solutions Pvt. Ltd.",
+        description: "Building and maintaining enterprise-grade ERP applications by developing scalable backend services, responsive frontend interfaces, and business-critical workflows in a production environment.",
+        highlights: [
+            "Developed and maintained ERP modules using React, Node.js, Express, Prisma ORM, and MySQL",
+            "Designed and implemented RESTful APIs, Prisma database models, relationships, and migrations",
+            "Engineered procurement & inventory workflows including Purchase Requests, Warehouse Management, and Goods Issue",
+            "Implemented robust Zod validation, approval workflows, and business rules for ERP operations",
+            "Collaborated using Git, code reviews, and feature-based development in a pnpm monorepo"
+        ],
+        tech: ["React", "TypeScript", "Node.js", "Express.js", "Prisma ORM", "MySQL", "Zod", "Git", "pnpm", "REST APIs"],
+        alignment: "left",
+        position: 10
+    },
+    {
+        id: 2,
         period: "July 2025 – September 2025",
         role: "MERN Stack Developer Intern",
         company: "SoftPro India Pvt. Ltd. (Remote)",
@@ -29,11 +46,11 @@ const experiences: Experience[] = [
             "Delivered production-ready features for internal projects"
         ],
         tech: ["Node.js", "Express.js", "MongoDB", "React.js", "JWT", "Git"],
-        alignment: "left",
-        position: 18
+        alignment: "right",
+        position: 30
     },
     {
-        id: 2,
+        id: 3,
         period: "June 2025 – July 2025",
         role: "AI & Machine Learning Intern",
         company: "IBM SkillsBuild (AICTE) (Remote)",
@@ -45,11 +62,11 @@ const experiences: Experience[] = [
             "Completed end-to-end ML pipeline"
         ],
         tech: ["Python", "Scikit-learn", "Pandas", "NumPy", "ML"],
-        alignment: "right",
-        position: 42
+        alignment: "left",
+        position: 50
     },
     {
-        id: 3,
+        id: 4,
         period: "April 2025 – May 2025",
         role: "Mentor & Facilitator Intern",
         company: "Nobel Internship Program (Remote)",
@@ -61,11 +78,11 @@ const experiences: Experience[] = [
             "Recognized for mentorship quality"
         ],
         tech: ["Leadership", "Communication", "Mentoring", "Public Speaking"],
-        alignment: "left",
-        position: 68
+        alignment: "right",
+        position: 70
     },
     {
-        id: 4,
+        id: 5,
         period: "July 2024 – August 2024",
         role: "Web Development Intern",
         company: "CETPA Infotech Pvt. Ltd. (Remote)",
@@ -77,7 +94,7 @@ const experiences: Experience[] = [
             "Strengthened frontend fundamentals"
         ],
         tech: ["HTML5", "CSS3", "JavaScript", "Flexbox", "Grid"],
-        alignment: "right",
+        alignment: "left",
         position: 90
     }
 ];
@@ -179,7 +196,7 @@ const ExperienceCard = ({ exp }: { exp: Experience }) => {
                         MILESTONE_{exp.id.toString().padStart(2, '0')}
                     </span>
                     <span className="text-white/20 font-mono text-[10px] tracking-widest uppercase">
-                        LOC_REMOTE
+                        {exp.company.includes("Remote") ? "LOC_REMOTE" : "LOC_PRODUCTION"}
                     </span>
                 </div>
 
@@ -234,12 +251,12 @@ export default function ExperienceSection() {
         { top: "25%", left: "80%", value: "LAT: 28.6139 | LON: 77.2090" },
         { top: "45%", left: "10%", value: "SYSTEM_SCAN_COMPLETE... [98%]" },
         { top: "60%", left: "85%", value: "TRACE_ID: 0x9f2e3a" },
-        { top: "75%", left: "20%", value: "DEPLOY_STAMP: 2026.02.20" },
-        { top: "90%", left: "70%", value: "CAPABILITY_MODEL: V4.0.2" },
+        { top: "75%", left: "20%", value: "DEPLOY_STAMP: 2026.04.15" },
+        { top: "90%", left: "70%", value: "CAPABILITY_MODEL: V5.0.0" },
     ], []);
 
     return (
-        <section ref={containerRef} className="relative min-h-[500vh] bg-[#0B0B0F] overflow-hidden py-20 md:py-32">
+        <section ref={containerRef} className="relative min-h-[600vh] bg-[#0B0B0F] overflow-hidden py-20 md:py-32">
 
             {/* Background Map Imprint & Animated Technical HUD */}
             <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">

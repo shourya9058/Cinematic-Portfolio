@@ -551,7 +551,7 @@ function PageTwo({ isMobile }: { isMobile: boolean }) {
                         </h3>
                         {/* B&W skill tags */}
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", position: "relative" }}>
-                            {["HTML", "CSS", "JavaScript", "React", "Node.js", "Express", "MongoDB", "REST APIs", "Git", "UI/UX"].map(s => (
+                            {["React", "TypeScript", "Node.js", "Express", "Prisma", "MySQL", "Zod", "REST APIs", "Git", "pnpm"].map(s => (
                                 <span key={s} style={{
                                     border: `3px solid ${PRO_INK}`,
                                     background: PRO_TAG_BG,
@@ -570,13 +570,13 @@ function PageTwo({ isMobile }: { isMobile: boolean }) {
                 }
                 fun={
                     <div style={{ background: FUN_DARK, position: "absolute", inset: 0, padding: "22px", display: "flex", flexDirection: "column", justifyContent: "center", gap: "10px", overflow: "hidden" }}>
-                        <Caption text="Rank: MERN Specialist" bw={false} />
+                        <Caption text="Rank: Full Stack Engineer" bw={false} />
                         <h3 style={{ ...BANGERS, fontSize: "clamp(1.5rem, 3vw, 3rem)", lineHeight: 0.95, color: FUN_GOLD, textTransform: "uppercase", margin: 0, textShadow: `4px 4px 0 ${FUN_RED}` }}>
-                            Full Stack<br />Builder
+                            Enterprise<br />Full Stack
                         </h3>
                         {/* Coloured skill tags */}
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                            {["HTML", "CSS", "JavaScript", "React", "Node.js", "Express", "MongoDB", "REST APIs", "Git", "UI/UX"].map(s => (
+                            {["React", "TypeScript", "Node.js", "Express", "Prisma", "MySQL", "Zod", "REST APIs", "Git", "pnpm"].map(s => (
                                 <span key={s} style={{
                                     border: `2px solid ${FUN_RED}`,
                                     background: FUN_RED,
