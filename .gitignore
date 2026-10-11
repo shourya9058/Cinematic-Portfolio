@@ -12,3 +12,4 @@ build
 .env.production.local
 .vercel
 .turbo
+*.mp4

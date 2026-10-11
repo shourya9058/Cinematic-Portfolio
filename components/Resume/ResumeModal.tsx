@@ -62,7 +62,7 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
 
                             <div className="flex items-center gap-2">
                                 <a
-                                    href="/resume/current_resume.pdf"
+                                    href="/api/resume"
                                     download="Shourya_Singh_Resume.pdf"
                                     className="group flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/5 hover:bg-crimson transition-all duration-500 border border-white/5 hover:border-crimson"
                                 >
@@ -81,7 +81,7 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
                         {/* Viewer Wrapper */}
                         <div className="flex-1 relative bg-[#121212] overflow-auto touch-auto">
                             <iframe
-                                src={`/resume/current_resume.pdf?t=${timestamp}#toolbar=0`}
+                                src={`/api/resume?t=${timestamp}#toolbar=0`}
                                 className="w-full h-full border-none min-h-[500px]"
                                 style={{ display: 'block' }}
                                 title="Resume Viewer"

@@ -23,7 +23,7 @@ export default function ResumePage() {
                 </div>
 
                 <a
-                    href="/resume/current_resume.pdf"
+                    href="/api/resume"
                     download="Shourya_Singh_Resume.pdf"
                     className="flex items-center gap-3 group px-4 py-2 rounded-full bg-crimson/10 border border-crimson/20 hover:bg-crimson transition-all duration-500"
                 >
@@ -36,7 +36,7 @@ export default function ResumePage() {
             <div className="flex-1 w-full max-w-5xl mx-auto px-4 pb-12">
                 <div className="w-full h-full bg-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-2xl relative">
                     <iframe
-                        src="/resume/current_resume.pdf"
+                        src="/api/resume"
                         className="w-full h-full min-h-[80vh] border-none"
                         title="Resume Full Viewer"
                     />

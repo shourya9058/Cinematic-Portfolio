@@ -1,36 +1,77 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Upload, CheckCircle, AlertCircle, Loader2, ArrowLeft, FileText } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminPage() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
     
     const [file, setFile] = useState<File | null>(null);
     const [uploadStatus, setUploadStatus] = useState<"idle" | "uploading" | "success" | "error">("idle");
     const [uploadMessage, setUploadMessage] = useState("");
+    const [activeResumeUrl, setActiveResumeUrl] = useState("/api/resume");
 
-    const handleLogin = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Since we are doing this client-side for simplicity in this specific request,
-        // we normally would call an API, but I will simulate the env check
-        // or actually provide a secure-ish way if the user has ENV set.
-        // For the sake of this implementation, I'll recommend the user to set these.
-        
-        const adminUser = process.env.NEXT_PUBLIC_ADMIN_USERNAME || "admin";
-        const adminPass = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "shourya2026";
-
-        if (username === adminUser && password === adminPass) {
-            setIsLoggedIn(true);
-            setLoginError("");
-        } else {
-            setLoginError("Unauthorized access. Invalid credentials.");
+    useEffect(() => {
+        // Verify if admin has an active session
+        async function checkAuth() {
+            try {
+                const res = await fetch("/api/admin/check");
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.authenticated) {
+                        setIsLoggedIn(true);
+                    }
+                }
+            } catch {
+                // Ignore failure
+            } finally {
+                setIsCheckingAuth(false);
+            }
         }
+        checkAuth();
+    }, []);
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoggingIn(true);
+        setLoginError("");
+
+        try {
+            const res = await fetch("/api/admin/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password }),
+            });
+
+            if (res.ok) {
+                setIsLoggedIn(true);
+                setLoginError("");
+                setPassword("");
+            } else {
+                const data = await res.json();
+                setLoginError(data.error || "Unauthorized access. Invalid credentials.");
+            }
+        } catch {
+            setLoginError("Failed to connect to authentication service.");
+        } finally {
+            setIsLoggingIn(false);
+        }
+    };
+
+    const handleLogout = async () => {
+        try {
+            await fetch("/api/admin/check", { method: "POST" });
+        } catch {
+            // Ignore
+        }
+        setIsLoggedIn(false);
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,20 +107,32 @@ export default function AdminPage() {
                 body: formData,
             });
 
-            if (response.ok) {
+            const data = await response.json();
+
+            if (response.ok && data.success) {
                 setUploadStatus("success");
-                setUploadMessage("Resume updated successfully.");
+                setUploadMessage(data.message || "Resume updated successfully.");
+                if (data.url) {
+                    setActiveResumeUrl(data.url);
+                }
                 setFile(null);
             } else {
-                const data = await response.json();
                 setUploadStatus("error");
                 setUploadMessage(data.error || "Failed to upload resume.");
             }
-        } catch (error) {
+        } catch {
             setUploadStatus("error");
-            setUploadMessage("An unexpected error occurred.");
+            setUploadMessage("An unexpected error occurred during upload.");
         }
     };
+
+    if (isCheckingAuth) {
+        return (
+            <main className="min-h-screen bg-[#0B0B0F] flex items-center justify-center p-6">
+                <Loader2 className="w-8 h-8 text-crimson animate-spin" />
+            </main>
+        );
+    }
 
     if (!isLoggedIn) {
         return (
@@ -137,8 +190,10 @@ export default function AdminPage() {
 
                         <button 
                             type="submit"
-                            className="w-full py-5 bg-crimson text-white font-black uppercase tracking-[0.4em] text-[11px] rounded-xl shadow-2xl shadow-crimson/30 hover:bg-[#A00000] active:scale-[0.98] transition-all"
+                            disabled={isLoggingIn}
+                            className="w-full py-5 bg-crimson text-white font-black uppercase tracking-[0.4em] text-[11px] rounded-xl shadow-2xl shadow-crimson/30 hover:bg-[#A00000] active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                         >
+                            {isLoggingIn ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
                             Authorize Entry
                         </button>
                     </form>
@@ -168,7 +223,7 @@ export default function AdminPage() {
                     </div>
                     
                     <button 
-                        onClick={() => setIsLoggedIn(false)}
+                        onClick={handleLogout}
                         className="self-start px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-[9px] font-black tracking-[0.3em] uppercase text-white/40 hover:text-white hover:bg-white/10 transition-all"
                     >
                         Secure Logout
@@ -234,8 +289,8 @@ export default function AdminPage() {
                                         >
                                             {uploadStatus === "uploading" ? <Loader2 className="w-5 h-5 animate-spin" /> :
                                              uploadStatus === "success" ? <CheckCircle className="w-5 h-5" /> :
-                                             <AlertCircle className="w-5 h-5" />}
-                                            <span className="text-[10px] font-bold uppercase tracking-[0.2em]">{uploadMessage}</span>
+                                             <AlertCircle className="w-5 h-5 flex-shrink-0" />}
+                                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] leading-relaxed">{uploadMessage}</span>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
@@ -258,12 +313,13 @@ export default function AdminPage() {
                     {/* Quick View / Instructions */}
                     <div className="space-y-8">
                         <div className="p-8 bg-white/[0.02] border border-white/5 rounded-3xl backdrop-blur-3xl">
-                            <h2 className="text-sm font-black uppercase tracking-[0.3em] text-white mb-6">Live Link</h2>
+                            <h2 className="text-sm font-black uppercase tracking-[0.3em] text-white mb-6">Live Resume Endpoint</h2>
                             <div className="flex items-center gap-4 p-4 bg-black/40 rounded-xl border border-white/5">
-                                <div className="flex-1 text-[10px] font-mono text-crimson truncate">/resume/current_resume.pdf</div>
+                                <div className="flex-1 text-[10px] font-mono text-crimson truncate">{activeResumeUrl}</div>
                                 <a 
-                                    href="/resume/current_resume.pdf" 
+                                    href="/api/resume" 
                                     target="_blank"
+                                    rel="noreferrer"
                                     className="px-4 py-2 bg-white/5 rounded-lg text-[8px] font-black tracking-widest uppercase hover:bg-white/10 transition-colors"
                                 >
                                     Preview
@@ -271,17 +327,17 @@ export default function AdminPage() {
                             </div>
                             
                             <div className="mt-12 space-y-6">
-                                <h3 className="text-[9px] font-black uppercase tracking-[0.5em] text-white/30">System Requirements</h3>
+                                <h3 className="text-[9px] font-black uppercase tracking-[0.5em] text-white/30">Deployment Guidelines</h3>
                                 <ul className="space-y-4">
                                     {[
-                                        "File must be strictly PDF format",
-                                        "Maximum size threshold: 5MB",
-                                        "Filename will be automatically sanitized",
-                                        "Changes reflect instantly on production"
+                                        "File must be strictly PDF format (max 5MB)",
+                                        "For Localhost: Files save directly to /public/resume",
+                                        "For Vercel Deployment: Enable Vercel Blob Storage in Project Settings (BLOB_READ_WRITE_TOKEN) for instant cloud persistence",
+                                        "Dynamic Route: /api/resume always serves the latest active version"
                                     ].map((text, i) => (
                                         <li key={i} className="flex items-start gap-3">
-                                            <div className="w-1 h-1 rounded-full bg-crimson mt-1.5" />
-                                            <span className="text-[9px] font-bold tracking-[0.1em] text-white/50 uppercase">{text}</span>
+                                            <div className="w-1 h-1 rounded-full bg-crimson mt-1.5 flex-shrink-0" />
+                                            <span className="text-[9px] font-bold tracking-[0.1em] text-white/50 uppercase leading-relaxed">{text}</span>
                                         </li>
                                     ))}
                                 </ul>

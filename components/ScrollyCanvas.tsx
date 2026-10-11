@@ -114,8 +114,8 @@ export default function ScrollyCanvas({ children }: { children: React.ReactNode 
             offsetY = 0;
         }
 
-        // Apply slight zoom to crop out watermark
-        const ZOOM = 1.05;
+        // No extra zoom needed as watermark is removed at the asset level
+        const ZOOM = 1.0;
         drawWidth *= ZOOM;
         drawHeight *= ZOOM;
 

@@ -14,13 +14,13 @@ export default function Overlay() {
 
     // Animation Maps
 
-    // Phase 1: Look Right -> Text on Right (0.05 -> 0.35)
-    const phase1Opacity = useTransform(scrollYProgress, [0.05, 0.15, 0.3, 0.4], [0, 1, 1, 0]);
-    const phase1X = useTransform(scrollYProgress, [0.05, 0.15], [50, 0]);
+    // Phase 1: Head Turns Left -> Text appears on Left (0.08 -> 0.55)
+    const phase1Opacity = useTransform(scrollYProgress, [0.08, 0.20, 0.45, 0.55], [0, 1, 1, 0]);
+    const phase1X = useTransform(scrollYProgress, [0.08, 0.20], [-50, 0]);
 
-    // Phase 2: Look Left -> Text on Left (0.60 -> 1.00)
+    // Phase 2: Head Centers & Winks -> Text appears on Right (0.60 -> 1.00)
     const phase2Opacity = useTransform(scrollYProgress, [0.60, 0.70, 0.90, 1.00], [0, 1, 1, 0]);
-    const phase2X = useTransform(scrollYProgress, [0.60, 0.70], [-50, 0]);
+    const phase2X = useTransform(scrollYProgress, [0.60, 0.70], [50, 0]);
 
     // Scroll Indicator: Visible only at start (0 -> 0.05)
     const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
@@ -39,10 +39,10 @@ export default function Overlay() {
                 <div className="w-[1px] h-16 bg-gradient-to-b from-crimson via-crimson to-transparent opacity-80" />
             </motion.div>
 
-            {/* Phase 1: Right Aligned */}
+            {/* Phase 1: Left Aligned (matches head gaze turned towards the left) */}
             <motion.div
                 style={{ opacity: phase1Opacity, x: phase1X }}
-                className="absolute top-[25%] md:top-[30%] right-[5%] md:right-[10%] max-w-[90%] md:max-w-2xl text-right z-20"
+                className="absolute top-[25%] md:top-[30%] left-[5%] md:left-[10%] max-w-[90%] md:max-w-2xl text-left z-20"
             >
                 <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold tracking-tighter mb-2 text-white leading-none">
                     SHOURYA SINGH<span className="text-crimson">.</span>
@@ -52,10 +52,10 @@ export default function Overlay() {
                 </p>
             </motion.div>
 
-            {/* Phase 2: Left Aligned */}
+            {/* Phase 2: Right Aligned (matches direct forward gaze & wink) */}
             <motion.div
                 style={{ opacity: phase2Opacity, x: phase2X }}
-                className="absolute bottom-[25%] md:bottom-[30%] left-[5%] md:left-[10%] max-w-[90%] md:max-w-2xl text-left z-20"
+                className="absolute bottom-[25%] md:bottom-[30%] right-[5%] md:right-[10%] max-w-[90%] md:max-w-2xl text-right z-20"
             >
                 <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight text-white uppercase tracking-tighter">
                     Turning Ideas <span className="text-crimson">Into</span><br />

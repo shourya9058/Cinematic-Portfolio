@@ -11,6 +11,7 @@
     "dependencies": {
         "@emailjs/browser": "^4.4.1",
         "@swc/helpers": "^0.5.18",
+        "@vercel/blob": "^2.8.1",
         "caniuse-lite": "^1.0.30001770",
         "framer-motion": "^11.0.0",
         "gsap": "^3.14.2",
