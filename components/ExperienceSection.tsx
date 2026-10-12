@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useRef, useState, useMemo } from "react";
-import { motion, useScroll, useTransform, useSpring, useInView, useMotionValue } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useInView, useMotionValue, useReducedMotion } from "framer-motion";
 
 interface Experience {
     id: number;
     period: string;
     role: string;
     company: string;
+    type?: string;
     description: string;
     highlights: string[];
     tech: string[];
@@ -21,15 +22,19 @@ const experiences: Experience[] = [
         period: "April 2026 – Present",
         role: "Full Stack Developer 1",
         company: "Sepfust Solutions Pvt. Ltd.",
-        description: "Building and maintaining enterprise-grade ERP applications by developing scalable backend services, responsive frontend interfaces, and business-critical workflows in a production environment.",
+        type: "Full-time",
+        description: "Working on enterprise ERP software, contributing to frontend development, backend APIs, database operations, business workflows, and production issue resolution.",
         highlights: [
-            "Developed and maintained ERP modules using React, Node.js, Express, Prisma ORM, and MySQL",
-            "Designed and implemented RESTful APIs, Prisma database models, relationships, and migrations",
-            "Engineered procurement & inventory workflows including Purchase Requests, Warehouse Management, and Goods Issue",
-            "Implemented robust Zod validation, approval workflows, and business rules for ERP operations",
-            "Collaborated using Git, code reviews, and feature-based development in a pnpm monorepo"
+            "Developing and maintaining enterprise ERP modules using React, TypeScript, Node.js, and Express.js.",
+            "Building and maintaining REST APIs for business-critical workflows.",
+            "Working with Prisma ORM and MySQL for database models, relations, queries, and schema changes.",
+            "Implementing Purchase Request workflows, approval flows, rejected-request resubmission, and business validations.",
+            "Contributing to Warehouse Management and Goods Issue functionality, including inventory and quantity validation.",
+            "Working on master-data and department-related modules.",
+            "Debugging and resolving frontend, backend, API, and data-flow issues.",
+            "Implementing request validation and business rules using Zod where applicable."
         ],
-        tech: ["React", "TypeScript", "Node.js", "Express.js", "Prisma ORM", "MySQL", "Zod", "Git", "pnpm", "REST APIs"],
+        tech: ["React", "TypeScript", "Node.js", "Express.js", "Prisma ORM", "MySQL", "REST APIs", "Zod"],
         alignment: "left",
         position: 10
     },
@@ -38,6 +43,7 @@ const experiences: Experience[] = [
         period: "July 2025 – September 2025",
         role: "MERN Stack Developer Intern",
         company: "SoftPro India Pvt. Ltd. (Remote)",
+        type: "Internship",
         description: "Worked as a full-stack MERN intern focusing on backend APIs, authentication, and responsive frontend development in an Agile environment.",
         highlights: [
             "Developed RESTful APIs using Node.js, Express.js, MongoDB",
@@ -54,6 +60,7 @@ const experiences: Experience[] = [
         period: "June 2025 – July 2025",
         role: "AI & Machine Learning Intern",
         company: "IBM SkillsBuild (AICTE) (Remote)",
+        type: "Internship",
         description: "Worked on applied machine learning projects with focus on data preprocessing, model training, evaluation, and deployment.",
         highlights: [
             "Built Employee Salary Prediction System using regression models",
@@ -70,6 +77,7 @@ const experiences: Experience[] = [
         period: "April 2025 – May 2025",
         role: "Mentor & Facilitator Intern",
         company: "Nobel Internship Program (Remote)",
+        type: "Internship",
         description: "Served as a mentor and facilitator in a global peer-learning program, focusing on communication, leadership, and cohort engagement.",
         highlights: [
             "Mentored 40+ students",
@@ -86,6 +94,7 @@ const experiences: Experience[] = [
         period: "July 2024 – August 2024",
         role: "Web Development Intern",
         company: "CETPA Infotech Pvt. Ltd. (Remote)",
+        type: "Internship",
         description: "Focused on frontend web development and responsive UI design for practice and client-oriented applications.",
         highlights: [
             "Developed web pages using HTML, CSS, JavaScript",
@@ -99,7 +108,7 @@ const experiences: Experience[] = [
     }
 ];
 
-const TechnicalDataPoint = ({ top, left, delay, value }: { top: string, left: string, delay: number, value: string }) => (
+const TechnicalDataPoint = ({ top, left, delay, value }: { top: string; left: string; delay: number; value: string }) => (
     <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: [0, 0.2, 0] }}
@@ -111,31 +120,35 @@ const TechnicalDataPoint = ({ top, left, delay, value }: { top: string, left: st
     </motion.div>
 );
 
-const ScanningBeam = ({ delay }: { delay: number }) => (
-    <motion.div
-        initial={{ top: "-10vh", opacity: 0 }}
-        animate={{ top: "110vh", opacity: [0, 0.15, 0] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "linear", delay }}
-        className="absolute left-0 right-0 h-[30vh] bg-gradient-to-b from-transparent via-crimson/5 to-transparent z-0 pointer-events-none"
-    />
-);
+const ScanningBeam = ({ delay, shouldReduceMotion }: { delay: number; shouldReduceMotion: boolean | null }) => {
+    if (shouldReduceMotion) return null;
+    return (
+        <motion.div
+            initial={{ top: "-10vh", opacity: 0 }}
+            animate={{ top: "110vh", opacity: [0, 0.15, 0] }}
+            transition={{ duration: 15, repeat: Infinity, ease: "linear", delay }}
+            className="absolute left-0 right-0 h-[30vh] bg-gradient-to-b from-transparent via-crimson/5 to-transparent z-0 pointer-events-none"
+        />
+    );
+};
 
 const ExperienceCard = ({ exp }: { exp: Experience }) => {
     const cardRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(cardRef, { once: false, amount: 0.3 });
+    const shouldReduceMotion = useReducedMotion();
+    const isInView = useInView(cardRef, { once: false, amount: 0.15 });
 
     // 3D Tilt Values
     const x = useMotionValue(0);
     const y = useMotionValue(0);
 
-    const mouseXSpring = useSpring(x);
-    const mouseYSpring = useSpring(y);
+    const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
+    const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
 
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7deg", "-7deg"]);
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7deg", "7deg"]);
+    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["6deg", "-6deg"]);
+    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-6deg", "6deg"]);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!cardRef.current) return;
+        if (!cardRef.current || shouldReduceMotion) return;
         const rect = cardRef.current.getBoundingClientRect();
         const width = rect.width;
         const height = rect.height;
@@ -166,22 +179,22 @@ const ExperienceCard = ({ exp }: { exp: Experience }) => {
     return (
         <motion.div
             ref={cardRef}
-            initial={{ opacity: 0, x: exp.alignment === "left" ? -50 : 50, y: 30 }}
-            animate={isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: exp.alignment === "left" ? -50 : 50, y: 30 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            initial={shouldReduceMotion ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: exp.alignment === "left" ? -40 : 40, y: 20 }}
+            animate={shouldReduceMotion || isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: exp.alignment === "left" ? -40 : 40, y: 20 }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.7, ease: "easeOut" }}
             onMouseMove={(e) => {
                 handleMouseMove(e);
                 handleGlowMove(e);
             }}
             onMouseLeave={handleMouseLeave}
-            className={`relative w-full md:w-[45%] group z-20`}
+            className="relative w-full md:w-[48%] lg:w-[45%] group z-20"
             style={{
                 perspective: 1000,
-                rotateX: isInView ? rotateX : 0,
-                rotateY: isInView ? rotateY : 0,
+                rotateX: isInView && !shouldReduceMotion ? rotateX : 0,
+                rotateY: isInView && !shouldReduceMotion ? rotateY : 0,
             }}
         >
-            <div className="relative p-6 md:p-10 rounded-2xl border border-white/5 bg-[#121212]/40 backdrop-blur-xl overflow-hidden transition-all duration-500 hover:border-crimson/40 group-hover:shadow-[0_0_50px_rgba(139,0,0,0.15)]">
+            <div className="relative p-6 sm:p-8 md:p-10 rounded-2xl border border-white/5 bg-[#121212]/60 backdrop-blur-xl overflow-hidden transition-all duration-500 hover:border-crimson/40 group-hover:shadow-[0_0_50px_rgba(139,0,0,0.15)]">
 
                 {/* Cursor Glow Effect */}
                 <div
@@ -191,38 +204,45 @@ const ExperienceCard = ({ exp }: { exp: Experience }) => {
                     }}
                 />
 
-                <div className="flex justify-between items-start mb-6">
+                <div className="flex justify-between items-center mb-6 gap-2 flex-wrap">
                     <span className="text-crimson font-mono text-xs tracking-[0.3em] uppercase block">
                         MILESTONE_{exp.id.toString().padStart(2, '0')}
                     </span>
-                    <span className="text-white/20 font-mono text-[10px] tracking-widest uppercase">
-                        {exp.company.includes("Remote") ? "LOC_REMOTE" : "LOC_PRODUCTION"}
-                    </span>
+                    <div className="flex items-center gap-2">
+                        {exp.type && (
+                            <span className="text-[10px] font-mono tracking-widest uppercase px-2.5 py-0.5 rounded-full bg-crimson/10 text-crimson/90 border border-crimson/20">
+                                {exp.type}
+                            </span>
+                        )}
+                        <span className="text-white/30 font-mono text-[10px] tracking-widest uppercase">
+                            {exp.company.includes("Remote") ? "LOC_REMOTE" : "LOC_PRODUCTION"}
+                        </span>
+                    </div>
                 </div>
 
-                <span className="text-text-muted font-mono text-xs tracking-widest block mb-1">{exp.period}</span>
+                <span className="text-gray-400 font-mono text-xs tracking-widest block mb-1">{exp.period}</span>
                 <h3 className="text-2xl md:text-3xl font-black text-white mb-2 group-hover:text-crimson transition-colors duration-300 tracking-tight">{exp.role}</h3>
-                <h4 className="text-crimson/80 text-sm md:text-base font-bold mb-6 tracking-widest uppercase flex items-center gap-2">
+                <h4 className="text-crimson/90 text-sm md:text-base font-bold mb-6 tracking-widest uppercase flex items-center gap-2">
                     <span className="w-4 h-[1px] bg-crimson" />
                     {exp.company}
                 </h4>
 
-                <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-8 font-medium">
+                <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-8 font-medium">
                     {exp.description}
                 </p>
 
                 <div className="space-y-3 mb-10">
                     {exp.highlights.map((item, i) => (
-                        <div key={i} className="flex items-start gap-4">
-                            <span className="w-1 h-1 rounded-full bg-crimson mt-2.5 shrink-0 shadow-[0_0_8px_rgba(139,0,0,1)]" />
-                            <p className="text-xs md:text-sm text-gray-400/90 leading-snug">{item}</p>
+                        <div key={i} className="flex items-start gap-3 md:gap-4">
+                            <span className="w-1.5 h-1.5 rounded-full bg-crimson mt-2 shrink-0 shadow-[0_0_8px_rgba(139,0,0,0.8)]" />
+                            <p className="text-xs md:text-sm text-gray-300/90 leading-relaxed">{item}</p>
                         </div>
                     ))}
                 </div>
 
                 <div className="flex flex-wrap gap-2 pt-6 border-t border-white/5">
                     {exp.tech.map((t, i) => (
-                        <span key={i} className="px-3 py-1.5 text-[10px] md:text-xs font-bold tracking-widest rounded-md bg-white/5 text-gray-500 border border-white/5 group-hover:border-crimson/30 group-hover:text-white transition-all duration-300 uppercase">
+                        <span key={i} className="px-3 py-1.5 text-[10px] md:text-xs font-bold tracking-wider rounded-md bg-white/5 text-gray-300 border border-white/5 group-hover:border-crimson/30 group-hover:text-white transition-all duration-300 uppercase">
                             {t}
                         </span>
                     ))}
@@ -234,6 +254,7 @@ const ExperienceCard = ({ exp }: { exp: Experience }) => {
 
 export default function ExperienceSection() {
     const containerRef = useRef<HTMLDivElement>(null);
+    const shouldReduceMotion = useReducedMotion();
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start end", "end start"]
@@ -270,7 +291,7 @@ export default function ExperienceSection() {
 
                     {/* Abstract Blueprints */}
                     <motion.circle
-                        animate={{ r: [150, 160, 150] }}
+                        animate={shouldReduceMotion ? undefined : { r: [150, 160, 150] }}
                         transition={{ duration: 10, repeat: Infinity }}
                         cx="200" cy="500" r="150" stroke="white" strokeWidth="1"
                     />
@@ -285,7 +306,7 @@ export default function ExperienceSection() {
                     <g transform="translate(150, 200) scale(0.5)">
                         <circle cx="0" cy="0" r="100" stroke="white" strokeWidth="1" />
                         <motion.path
-                            animate={{ rotate: 360 }}
+                            animate={shouldReduceMotion ? undefined : { rotate: 360 }}
                             transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
                             d="M0 -120 L10 0 L0 120 L-10 0 Z" fill="white"
                         />
@@ -298,23 +319,23 @@ export default function ExperienceSection() {
                 ))}
 
                 {/* Scanning Radials */}
-                <ScanningBeam delay={0} />
-                <ScanningBeam delay={7.5} />
+                <ScanningBeam delay={0} shouldReduceMotion={shouldReduceMotion} />
+                <ScanningBeam delay={7.5} shouldReduceMotion={shouldReduceMotion} />
 
                 {/* Floating Technical Symbols */}
                 <motion.div
-                    animate={{ x: [0, 50, 0], y: [0, -30, 0], opacity: [0.1, 0.3, 0.1] }}
+                    animate={shouldReduceMotion ? undefined : { x: [0, 50, 0], y: [0, -30, 0], opacity: [0.1, 0.3, 0.1] }}
                     transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
                     className="absolute top-[20%] left-[70%] text-[4vw] font-black text-white/5 select-none"
                 >
                     &lt;/&gt;
                 </motion.div>
                 <motion.div
-                    animate={{ x: [0, -40, 0], y: [0, 60, 0], opacity: [0.05, 0.15, 0.05] }}
+                    animate={shouldReduceMotion ? undefined : { x: [0, -40, 0], y: [0, 60, 0], opacity: [0.05, 0.15, 0.05] }}
                     transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
                     className="absolute bottom-[30%] left-[10%] text-[3vw] font-black text-white/5 select-none"
                 >
-                    { }
+                    &#123; &#125;
                 </motion.div>
             </div>
 
@@ -332,7 +353,7 @@ export default function ExperienceSection() {
                         stroke="#8B0000"
                         strokeWidth="0.4"
                         fill="none"
-                        style={{ pathLength }}
+                        style={{ pathLength: shouldReduceMotion ? 1 : pathLength }}
                         strokeLinecap="round"
                     />
                 </svg>
@@ -356,16 +377,16 @@ export default function ExperienceSection() {
                 </div>
 
                 <div className="relative">
-                    {experiences.map((exp, index) => (
+                    {experiences.map((exp) => (
                         <div
                             key={exp.id}
-                            className={`relative flex items-center w-full min-h-[60vh] mb-40 md:mb-0`}
+                            className="relative flex items-center w-full min-h-[60vh] mb-32 md:mb-16 last:mb-0"
                         >
                             <div className={`w-full flex ${exp.alignment === "left" ? 'justify-start md:pr-[10%]' : 'justify-end md:pl-[10%]'}`}>
                                 <ExperienceCard exp={exp} />
                             </div>
 
-                            <div className="absolute left-[50%] -translate-x-1/2 flex items-center justify-center pointer-events-none">
+                            <div className="absolute left-[50%] -translate-x-1/2 hidden md:flex items-center justify-center pointer-events-none">
                                 <motion.div
                                     className="w-4 h-4 md:w-6 md:h-6 rounded-full bg-deep-black border-2 md:border-4 border-crimson z-30 shadow-[0_0_15px_rgba(139,0,0,0.5)]"
                                     initial={{ scale: 0 }}
@@ -391,7 +412,7 @@ export default function ExperienceSection() {
                 <div className="w-[2px] h-40 bg-gradient-to-b from-crimson/30 via-crimson to-transparent mb-10" />
                 <motion.div
                     className="w-12 h-12 rounded-full border-2 border-crimson flex items-center justify-center p-1.5 mb-8"
-                    animate={{ scale: [1, 1.15, 1], boxShadow: ["0 0 10px rgba(139,0,0,0.5)", "0 0 30px rgba(139,0,0,0.8)", "0 0 10px rgba(139,0,0,0.5)"] }}
+                    animate={shouldReduceMotion ? undefined : { scale: [1, 1.15, 1], boxShadow: ["0 0 10px rgba(139,0,0,0.5)", "0 0 30px rgba(139,0,0,0.8)", "0 0 10px rgba(139,0,0,0.5)"] }}
                     transition={{ repeat: Infinity, duration: 2.5 }}
                 >
                     <div className="w-full h-full rounded-full bg-crimson shadow-[0_0_20px_rgba(139,0,0,1)] flex items-center justify-center">
